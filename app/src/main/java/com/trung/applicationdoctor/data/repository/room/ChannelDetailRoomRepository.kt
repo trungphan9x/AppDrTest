@@ -8,6 +8,33 @@ import com.trung.applicationdoctor.data.remote.response.ChannelDetail
 class ChannelDetailRoomRepository(private val channelDetailDao: ChannelDetailDao) {
     val allChannelDetail: LiveData<ChannelDetailEntity> = channelDetailDao.getChannelDetail()
 
+    fun getChannelDetailLiveData(boardId: String?) :  LiveData<ChannelDetailEntity?> {
+        return channelDetailDao.getChannelDetailLiveData(boardId)
+    }
+
+    suspend fun getChannelDetail(boardId: String) : ChannelDetail? {
+        return channelDetailDao.getChannelDetail(boardId).let {
+            it?.let {
+                ChannelDetail(
+                    boardIdx = it.boardIdx,
+                    listCnt = it.listCnt,
+                    corpIdx = it.corpIdx,
+                    contentsYn = it.contentsYn,
+                    title = it.title,
+                    boardImg = it.boardImg,
+                    viewCnt = it.viewCnt,
+                    contents = it.contents,
+                    insDate = it.insDate,
+                    replyCnt = it.replyCnt,
+                    likeCnt = it.likeCnt,
+                    myLikeYn = it.myLikeYn,
+                    myScrapYn = it.myScrapYn,
+                    category =  it.category
+                )
+            }
+        }
+    }
+
     suspend fun insert(channelDetail: ChannelDetail) =
         channelDetailDao.insert(
             ChannelDetailEntity(
@@ -24,7 +51,6 @@ class ChannelDetailRoomRepository(private val channelDetailDao: ChannelDetailDao
                 likeCnt = channelDetail.likeCnt,
                 myLikeYn = channelDetail.myLikeYn,
                 myScrapYn = channelDetail.myScrapYn,
-                corpName = channelDetail.corpName,
                 category = channelDetail.category
             )
         )
@@ -47,7 +73,6 @@ class ChannelDetailRoomRepository(private val channelDetailDao: ChannelDetailDao
                     likeCnt = it.likeCnt,
                     myLikeYn = it.myLikeYn,
                     myScrapYn = it.myScrapYn,
-                    corpName = it.corpName,
                     category =  it.category
                 )
             )

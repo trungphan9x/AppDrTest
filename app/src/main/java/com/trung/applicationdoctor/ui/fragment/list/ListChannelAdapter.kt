@@ -8,25 +8,26 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.trung.applicationdoctor.data.db.entity.ChannelListEntity
+import com.trung.applicationdoctor.data.remote.response.ChannelList
 import com.trung.applicationdoctor.databinding.ItemListChannelBinding
 import com.trung.applicationdoctor.extension.hideKeyboard
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ListChannelAdapter : ListAdapter<ChannelListEntity, ListChannelAdapter.ViewHolder>(DiffCallback), Filterable {
-    val items: ArrayList<ChannelListEntity> = arrayListOf()
+class ListChannelAdapter : ListAdapter<ChannelList, ListChannelAdapter.ViewHolder>(DiffCallback), Filterable {
+    val items: ArrayList<ChannelList> = arrayListOf()
 
     lateinit var binding: ItemListChannelBinding
 
-    private var onItemClickListener: ((Int, ChannelListEntity) -> Unit)? = null
+    private var onItemClickListener: ((Int, ChannelList) -> Unit)? = null
 
-    var photoFilterList = ArrayList<ChannelListEntity>()
+    var photoFilterList = ArrayList<ChannelList>()
 
     init {
         photoFilterList = items
     }
 
-    fun setIetms(items: List<ChannelListEntity>?) {
+    fun setIetms(items: List<ChannelList>?) {
         items?.let {
             this.items.clear()
             this.items.addAll(items)
@@ -38,7 +39,7 @@ class ListChannelAdapter : ListAdapter<ChannelListEntity, ListChannelAdapter.Vie
         return photoFilterList.size
     }
 
-    fun setOnItemClickListener(onItemClickListener: ((Int, ChannelListEntity) -> Unit)) {
+    fun setOnItemClickListener(onItemClickListener: ((Int, ChannelList) -> Unit)) {
         this.onItemClickListener = onItemClickListener
     }
 
@@ -65,15 +66,15 @@ class ListChannelAdapter : ListAdapter<ChannelListEntity, ListChannelAdapter.Vie
     class ViewHolder(private val binding: ItemListChannelBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            channelListEntity: ChannelListEntity,
-            onItemClickListener: ((Int, ChannelListEntity) -> Unit)?
+            channelList: ChannelList,
+            onItemClickListener: ((Int, ChannelList) -> Unit)?
         ) {
 
-            binding.channelListEntity = channelListEntity
+            binding.channelList = channelList
 
             binding.root.setOnClickListener {
                 binding.root.hideKeyboard()
-                onItemClickListener?.invoke(position, channelListEntity)
+                onItemClickListener?.invoke(position, channelList)
             }
 
             // This is important, because it forces the data binding to execute immediately,
@@ -89,7 +90,7 @@ class ListChannelAdapter : ListAdapter<ChannelListEntity, ListChannelAdapter.Vie
                 if (charSearch.isEmpty()) {
                     photoFilterList = items
                 } else {
-                    val resultList = ArrayList<ChannelListEntity>()
+                    val resultList = ArrayList<ChannelList>()
                     for (item in items) {
                         if (item.title?.toLowerCase(Locale.ROOT)
                                 ?.contains(charSearch.toLowerCase(Locale.ROOT))!!
@@ -106,7 +107,7 @@ class ListChannelAdapter : ListAdapter<ChannelListEntity, ListChannelAdapter.Vie
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                photoFilterList = results?.values as ArrayList<ChannelListEntity>
+                photoFilterList = results?.values as ArrayList<ChannelList>
                 notifyDataSetChanged()
             }
 
@@ -117,13 +118,13 @@ class ListChannelAdapter : ListAdapter<ChannelListEntity, ListChannelAdapter.Vie
      * Allows the RecyclerView to determine which items have changed when the [List] of [PhotoDetailEntity]
      * has been updated.
      */
-    companion object DiffCallback : DiffUtil.ItemCallback<ChannelListEntity>() {
+    companion object DiffCallback : DiffUtil.ItemCallback<ChannelList>() {
         //Use Kotlin's referential equality operator (===), which returns true if the object references for oldItem and newItem are the same.
         //override fun areItemsTheSame(oldItem: PhotoDetailEntity, newItem: PhotoDetailEntity) = oldItem === newItem
-        override fun areItemsTheSame(oldItem: ChannelListEntity, newItem: ChannelListEntity) =
+        override fun areItemsTheSame(oldItem: ChannelList, newItem: ChannelList) =
             oldItem.boardIdx == newItem.boardIdx
 
-        override fun areContentsTheSame(oldItem: ChannelListEntity, newItem: ChannelListEntity) =
+        override fun areContentsTheSame(oldItem: ChannelList, newItem: ChannelList) =
             oldItem == newItem
     }
 }

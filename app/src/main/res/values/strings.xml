@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ApplicationDoctor</string>
     <string name="all">전체</string>
+    <string name="email_hint">이메일을 입력해주세요</string>
+    <string name="pw_hint">비밀번호를 입력해주세요</string>
+    <string name="login_text_button">로그인</string>
 </resources>

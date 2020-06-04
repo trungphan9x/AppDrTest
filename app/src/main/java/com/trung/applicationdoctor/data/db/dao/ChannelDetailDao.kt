@@ -9,8 +9,14 @@ import com.trung.applicationdoctor.data.db.entity.ChannelDetailEntity
 @Dao
 interface ChannelDetailDao {
 
-    @Query("SELECT * from channel_detail")
+    @Query("SELECT * from channel_detail ORDER BY timestamp DESC LIMIT 1 ")
     fun getChannelDetail(): LiveData<ChannelDetailEntity>
+
+    @Query("SELECT * from channel_detail Where boardIdx == :boardIdx")
+    fun getChannelDetailLiveData(boardIdx: String?): LiveData<ChannelDetailEntity?>
+
+    @Query("SELECT * from channel_detail Where boardIdx == :boardIdx")
+    suspend fun getChannelDetail(boardIdx: String): ChannelDetailEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(channelDetail: ChannelDetailEntity)

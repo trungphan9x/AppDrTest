@@ -1,5 +1,7 @@
 package com.trung.applicationdoctor.ui.activity.main
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -50,7 +52,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun initPagerAdapterAndTabs() {
         customPagerAdapter = CustomPagerAdapter(supportFragmentManager)
-        customPagerAdapter.addFragment(ListChannelFragment(), getString(R.string.all))
+        customPagerAdapter.addFragment(ListChannelFragment.newInstance(tabName = getString(R.string.all), tabId = getString(R.string.all)), getString(R.string.all))
         binding.pager.adapter = customPagerAdapter
 
         binding.tabLayout.setupWithViewPager(binding.pager)
@@ -58,7 +60,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                //loadDataForSpecificTab()dd
+
+                when (position) {
+                    0 -> {
+                        viewModel.clickedTab.set(getString(R.string.all))
+                    }
+                }
             }
         })
     }
@@ -92,6 +99,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     companion object {
-        const val CLICK_SEARCH = 0
+
+        fun startActivity(activity: Activity) {
+            activity.startActivity(Intent(activity, MainActivity::class.java))
+            activity.finish()
+        }
     }
 }

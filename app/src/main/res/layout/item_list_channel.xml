@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="channelListEntity"
-            type="com.trung.applicationdoctor.data.db.entity.ChannelListEntity" />
+            name="channelList"
+            type="com.trung.applicationdoctor.data.remote.response.ChannelList" />
     </data>
 
 
@@ -17,7 +17,7 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_photo_url"
-            setUrlPhoto="@{channelListEntity.imgPath}"
+            setUrlPhoto="@{channelList.imgPath}"
             android:layout_width="0dp"
             android:layout_height="202dp"
             android:scaleType="centerCrop"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
-            android:text="@{channelListEntity.category}"
+            android:text="@{channelList.category}"
             tools:text="테마밥상"
             android:textSize="12sp"
             android:textColor="@color/tealish"
@@ -52,7 +52,7 @@
             android:letterSpacing="-0.05"
             android:lineSpacingExtra="4sp"
             tools:text="10"
-            android:text="@{channelListEntity.replyCnt}"
+            android:text="@{channelList.replyCnt}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_photo_url" />
 
@@ -76,7 +76,7 @@
             android:letterSpacing="-0.05"
             android:lineSpacingExtra="4sp"
             tools:text="56"
-            android:text="@{channelListEntity.likeCnt}"
+            android:text="@{channelList.likeCnt}"
             app:layout_constraintRight_toLeftOf="@+id/iv_comment"
             app:layout_constraintTop_toBottomOf="@+id/iv_photo_url" />
 
@@ -98,7 +98,7 @@
             android:letterSpacing="-0.04"
             android:lineSpacingExtra="8sp"
             tools:text="다이어트 식단의 모든것"
-            android:text="@{channelListEntity.title}"
+            android:text="@{channelList.title}"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -113,7 +113,7 @@
             android:letterSpacing="-0.05"
             android:lineSpacingExtra="4sp"
             tools:text="2019.10.19"
-            android:text="@{channelListEntity.insDate}"
+            android:text="@{channelList.insDate}"
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintLeft_toLeftOf="parent"

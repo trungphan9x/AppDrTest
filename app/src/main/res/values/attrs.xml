@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoadingButton">
+        <attr name="buttonText" format="string" />
+        <attr name="buttonEnableTextColor" format="color" />
+        <attr name="buttonUnableTextColor" format="color" />
+        <attr name="buttonTextSize" format="dimension|reference" />
+
+        <attr name="buttonTextFontFamily" format="reference" />
+        <attr name="setLoading" format="boolean" />
+        <attr name="setEnable" format="boolean" />
+        <attr name="setClickable" format="boolean" />
+
+    </declare-styleable>
+</resources>

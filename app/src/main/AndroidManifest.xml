@@ -13,13 +13,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.main.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".ui.activity.main.MainActivity"
+            android:configChanges="orientation|screenSize">
+
         </activity>
+
+        <activity
+            android:name=".ui.activity.detail.DetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowTranslucentStatus="true"/>
+
+        <activity
+            android:name=".ui.activity.signin.SignInActivity"
+            android:configChanges="orientation|screenSize">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

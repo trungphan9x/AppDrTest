@@ -25,12 +25,12 @@ interface AppDoctorAPI {
     suspend fun getChannelList(
         @Query("member_idx") memberId: String,
         @Query("page_num") pageNum: Int,
-        @Query("category_idx") categoryId: Int? = null
+        @Query("category_idx") categoryId: String? = null
     ): AppDoctorResponseBody<List<ChannelList>>
 
     @GET("/board_v_1_0_0/channel_detail")
     suspend fun getChannelDetail(
         @Query("member_idx") memberId: String,
-        @Query("board_idx") boardId: Int
+        @Query("board_idx") boardId: String
     ): ChannelDetail
 }

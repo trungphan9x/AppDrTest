@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.trung.applicationdoctor.ui.activity.signin.SignInViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.home.MainActivity">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:padding="23dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_navigate_before_tealish_24dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            style="@style/TextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="42dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            android:text="로그인을 위해\n정보를 입력해주세요." />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:letterSpacing="-0.05"
+            android:lineSpacingExtra="6sp"
+            android:text="이메일"
+            android:layout_marginTop="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            android:layout_marginLeft="20dp" />
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_sign_email"
+            isErrorHint="@{viewModel.isForceEmailError() ? true : !viewModel.checkEmailValid(viewModel.email) &amp;&amp; (!(viewModel.email.length() == 0) &amp;&amp; !viewModel.isEmailFocused())}"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="20dp"
+            android:hint="@string/email_hint"
+            android:textSize="16sp"
+            android:textColorHint="@color/light_blue_grey"
+            android:letterSpacing="-0.04"
+            android:lineSpacingExtra="8sp"
+            android:background="@drawable/background_text_input_layout"
+            app:layout_constraintStart_toStartOf="@id/tv_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_sign_email"
+                isShowValidButton="@{viewModel.isForceEmailError() ? true : !(viewModel.email.length() == 0) || (!(viewModel.email.length() == 0) &amp;&amp; !viewModel.isEmailFocused() )}"
+                onFocusChangeListener="@{viewModel.getOnChangeFocused()}"
+                showClearButton="@{viewModel.isForceEmailError() ? false : !(viewModel.email.length() == 0) &amp;&amp; viewModel.isEmailFocused()}"
+                showValidButton="@{viewModel.isForceEmailError() ? false : viewModel.checkEmailValid(viewModel.email)}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:addTextChangedListener="@{viewModel.emailTextWatcher}"
+                android:background="@null"
+
+                android:inputType="textEmailAddress"
+                android:paddingTop="8dp"
+                android:paddingBottom="2dp"
+                android:text="@={viewModel.email}"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:theme="@style/AppDoctorTextInputStyle"
+                android:layout_marginLeft="20dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_pw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:letterSpacing="-0.05"
+            android:lineSpacingExtra="6sp"
+            android:text="비밀번호"
+            android:layout_marginTop="9dp"
+            app:layout_constraintStart_toStartOf="@id/tv_email"
+            app:layout_constraintTop_toBottomOf="@+id/til_sign_email"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_sign_password"
+            isErrorHint="@{viewModel.isForcePasswordError() ? true : !(viewModel.password.length() > 5) &amp;&amp; (!(viewModel.password.length() == 0) &amp;&amp; !viewModel.isPasswordFocused())}"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="6dp"
+            android:hint="@string/pw_hint"
+            android:textSize="16sp"
+            android:textColorHint="@color/light_blue_grey"
+            android:letterSpacing="-0.04"
+            android:lineSpacingExtra="8sp"
+            android:background="@drawable/background_text_input_layout"
+            app:layout_constraintEnd_toEndOf="@+id/til_sign_email"
+            app:layout_constraintStart_toStartOf="@+id/til_sign_email"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pw">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_sign_password"
+                isShowValidButton="@{viewModel.isForcePasswordError() ? true :!(viewModel.password.length() == 0) || (!(viewModel.password.length() == 0) &amp;&amp; !viewModel.isPasswordFocused())}"
+                onFocusChangeListener="@{viewModel.getOnChangeFocused()}"
+                showClearButton="@{viewModel.isForcePasswordError() ? false :!(viewModel.password.length() == 0) &amp;&amp; viewModel.isPasswordFocused()}"
+                showValidButton="@{viewModel.isForcePasswordError() ? false : true}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:addTextChangedListener="@{viewModel.passwordTextWatcher}"
+                android:background="@null"
+                android:hint=""
+                android:inputType="textPassword"
+                android:paddingTop="8dp"
+                android:paddingBottom="2dp"
+                android:text="@={viewModel.password}"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:theme="@style/AppDoctorTextInputStyle"
+                android:layout_marginLeft="20dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.trung.applicationdoctor.util.LoadingButton
+            android:id="@+id/lb_sign_in"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_sign_password"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/background_button"
+            onClickWithDebounce="@{viewModel.clickLogIn}"
+            android:textAllCaps="false"
+            app:buttonEnableTextColor="@color/white"
+            app:buttonText="@string/login_text_button"
+            buttonTextSize="16sp"
+            app:setEnable="@{true}"
+            app:setLoading="@{viewModel.isLoading()}"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="@id/tv_email"
+            app:layout_constraintTop_toBottomOf="@+id/lb_sign_in"
+            app:srcCompat="@drawable/ic_check_circle_black_24dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/cloudy_blue"
+            android:letterSpacing="-0.04"
+            android:text="로그인저장"
+            android:layout_marginLeft="6dp"
+            app:layout_constraintStart_toEndOf="@id/btnCheckBox"
+            app:layout_constraintTop_toTopOf="@+id/btnCheckBox"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

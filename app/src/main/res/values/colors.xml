@@ -3,8 +3,19 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="dark_sky_blue">#43afd8</color>
     <color name="tealish">#1db7b6</color>
     <color name="black">#202020</color>
     <color name="light_blue_grey">#ced4d4</color>
-    <color name="white">#FFFFFF</color>
+    <color name="cloudy_blue">#b9c4cb</color>
+    <color name="coral_pink">#ff6264</color>
+    <color name="light_periwinkle">#dadee4</color>
+
+    <color name="colorError">#F5A623</color>
+    <color name="colorPlaceHolder">#c8c5c5</color>
+    <color name="colorPrimaryText">#FFFFFF</color>
+    <color name="colorValid">#f8e71c</color>
+    <color name="colorEditTextNormal">#4ce7e6e7</color>
 </resources>
