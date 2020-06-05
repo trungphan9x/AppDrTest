@@ -63,7 +63,10 @@ class SignInViewModel(private val signApiRepository: SignApiRepository) : BaseVi
                 viewModelScope.launch(Dispatchers.IO) {
                     signApiRepository.signIn(memberId = email, memberPw = password, deviceOS = "A", gcmKey = 2).let {
                         when(it.code) {
-                            "1000" -> _uiEvent.postValue(UIEvent(LOG_IN_SUCCESS, it.codeMsg))
+                            "1000" -> {
+                                _uiEvent.postValue(UIEvent(LOG_IN_SUCCESS, it.codeMsg))
+                                context.setUserMemberIdx(it.memberIdx)
+                            }
                             else -> _uiEvent.postValue(UIEvent(LOG_IN_FAIL, it.codeMsg))
                         }
                     }

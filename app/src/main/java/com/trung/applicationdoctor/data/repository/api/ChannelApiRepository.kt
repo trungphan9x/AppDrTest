@@ -12,11 +12,11 @@ class ChannelApiRepository(private val appDoctorAPI: AppDoctorAPI) {
         return appDoctorAPI.getCategoryList()
     }
 
-    suspend fun getChannelList(memberId: String, pageNum: Int, categoryId: String? = null) : AppDoctorResponseBody<List<ChannelList>> {
-        return appDoctorAPI.getChannelList(memberId, pageNum, categoryId)
+    suspend fun getChannelList(memberIdx: String, pageNum: Int, categoryId: String? = null) : AppDoctorResponseBody<List<ChannelList>> {
+        return appDoctorAPI.getChannelList(memberIdx, pageNum, categoryId)
     }
 
-    suspend fun getChannelDetail(memberId: String, boardId: String) : ChannelDetail {
-        return appDoctorAPI.getChannelDetail(memberId, boardId)
+    suspend fun getChannelDetail(memberIdx: String, boardId: String) : ChannelDetail {
+        return appDoctorAPI.getChannelDetail(memberIdx, boardId)
     }
 }

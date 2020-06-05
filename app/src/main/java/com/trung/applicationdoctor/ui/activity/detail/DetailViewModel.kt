@@ -8,10 +8,12 @@ import com.trung.applicationdoctor.core.BaseViewModel
 import com.trung.applicationdoctor.data.remote.response.ChannelDetail
 import com.trung.applicationdoctor.data.repository.api.ChannelApiRepository
 import com.trung.applicationdoctor.data.repository.room.ChannelDetailRoomRepository
+import com.trung.applicationdoctor.ui.activity.detail.DetailActivity.Companion.ERROR
 import com.trung.applicationdoctor.util.extension.getUserEmail
 import com.trung.applicationdoctor.util.extension.isNetworkConnected
 import com.trung.applicationdoctor.ui.activity.detail.DetailActivity.Companion.NO_INTERNET_AND_NO_DATA_IN_ROOM
 import com.trung.applicationdoctor.util.UIEvent
+import com.trung.applicationdoctor.util.extension.getUserMemberIdx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -46,15 +48,13 @@ class DetailViewModel(private val channelDetailRoomRepository: ChannelDetailRoom
         try {
             viewModelScope.launch (Dispatchers.IO) {
                 if(context.isNetworkConnected) {
-                    channelApiRepository.getChannelDetail(memberId = context.getUserEmail().toString(), boardId = boardId).let {
+                    channelApiRepository.getChannelDetail(memberIdx = context.getUserMemberIdx().toString(), boardId = boardId).let {
                         when (it.code) {
                             "1000" -> {
                                 insertDetailChannelToRoom(it)
                                 channelDetail.set(it)
                             }
-                            else -> {
-
-                            }
+                            else -> _uiEvent.postValue(UIEvent(ERROR, it.codeMsg))
                         }
 
                     }
@@ -64,7 +64,7 @@ class DetailViewModel(private val channelDetailRoomRepository: ChannelDetailRoom
                             channelDetail.set(it)
 
                         } else {
-                            _uiEvent.postValue(UIEvent(NO_INTERNET_AND_NO_DATA_IN_ROOM, "You have no internet connect to open the page"))
+                            _uiEvent.postValue(UIEvent(ERROR, "You have no internet connect to open the page"))
                         }
                     }
                 }

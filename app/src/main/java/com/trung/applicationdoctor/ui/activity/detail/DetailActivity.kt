@@ -49,7 +49,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
     override fun onUiEvent() = Observer<UIEvent<Int>> {
         it.getContentIfNotHandled()?.let {
             when (it.first) {
-                NO_INTERNET_AND_NO_DATA_IN_ROOM -> {
+                ERROR -> {
                     AppDialog.showDialog(this, it.second.toString()) {super.onBackPressed()}
                 }
                 else -> {
@@ -63,6 +63,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
     companion object {
         private const val DETAIL_BOARD_ID = "detail_board_id"
         const val NO_INTERNET_AND_NO_DATA_IN_ROOM = 0
+        const val ERROR = 1
         fun startActivity(activity: Activity?, boardId: String) {
             Intent(activity, DetailActivity::class.java).apply {
                 this.putExtra(DETAIL_BOARD_ID, boardId)

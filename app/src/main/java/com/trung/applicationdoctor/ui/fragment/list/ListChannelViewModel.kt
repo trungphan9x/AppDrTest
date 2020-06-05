@@ -14,13 +14,14 @@ import com.trung.applicationdoctor.util.extension.getUserEmail
 import com.trung.applicationdoctor.util.extension.isNetworkConnected
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelFragment.Companion.ERROR_MESSAGE
 import com.trung.applicationdoctor.util.UIEvent
+import com.trung.applicationdoctor.util.extension.getUserMemberIdx
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ListChannelViewModel (private val channelApiRepository: ChannelApiRepository,
                             private val channelListRoomRepository: ChannelListRoomRepository
 ) : BaseViewModel() {
-    val tabInformation = ObservableField<ChannelCategory>()
+    //val tabInformation = ObservableField<ChannelCategory>()
 
     val allItemsByCategory = ObservableField<List<ChannelList>>()
 
@@ -29,12 +30,12 @@ class ListChannelViewModel (private val channelApiRepository: ChannelApiReposito
      * if it has internet, get specific items of specific tab for RecyclerView in fragment_list_channel.xml from API incase of other tabs,
      * else if it has no internet, get all items or items of specific tab for RecyclerView in fragment_list_channel.xml from ROOM in case of tab 전체 or other tabs respectively
      */
-    fun getItemsFromApi() {
+    fun getItemsFromApi(tabId: String, tabName: String) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
                 if(ApplicationDoctor.context.isNetworkConnected){
-                    if(tabInformation.get()?.categoryName == context.getString(R.string.all)) {
-                        channelApiRepository.getChannelList(pageNum = 1, memberId = context.getUserEmail().toString()).let {
+                    if(tabName == context.getString(R.string.all) ) {
+                        channelApiRepository.getChannelList(pageNum = 1, memberIdx = context.getUserMemberIdx().toString()).let {
                             when (it.code) {
                                 "1000" -> {
                                     allItemsByCategory.set(it.dataArray)
@@ -48,10 +49,13 @@ class ListChannelViewModel (private val channelApiRepository: ChannelApiReposito
 
                         }
                     }else {
-                        channelApiRepository.getChannelList(pageNum = 1, memberId = context.getUserEmail().toString(), categoryId = tabInformation.get()?.categoryIdx).let {
+                        channelApiRepository.getChannelList(pageNum = 1, memberIdx = context.getUserMemberIdx().toString(), categoryId = tabId).let {
                             when (it.code) {
                                 "1000" -> {
                                     allItemsByCategory.set(it.dataArray)
+                                    if(tabId == "story") {
+                                        insertAllToChannelListDb(it.dataArray)
+                                    }
                                 }
 
                                 else -> {
@@ -62,7 +66,7 @@ class ListChannelViewModel (private val channelApiRepository: ChannelApiReposito
                         }
                     }
                 } else {
-                    if(tabInformation.get()?.categoryName == context.getString(R.string.all)) {
+                    if(tabName == context.getString(R.string.all)) {
                         channelListRoomRepository.getListAll().let {
                             if(it != null) {
                                 allItemsByCategory.set(it)
@@ -73,7 +77,7 @@ class ListChannelViewModel (private val channelApiRepository: ChannelApiReposito
                         }
 
                     }else {
-                        channelListRoomRepository.getListByCategory(tabInformation.get()?.categoryName!!).let {
+                        channelListRoomRepository.getListByCategory(if(tabId == "story") "" else tabName).let {
                             if(it != null) {
                                 allItemsByCategory.set(it)
                             } else {

@@ -4,6 +4,7 @@ import android.content.Context
 
 const val PREF_NAME = "shared_app_doctor"
 const val PREF_EMAIL = "shared_email"
+const val PREF_MEMBER_IDX = "shared_member_idx"
 const val PREF_PW = "shared_pw"
 const val FIRST_LAUNCH_APP = "first_launch_app"
 /**
@@ -17,7 +18,7 @@ fun Context.setUserEmail(email: String) {
 }
 
 /**
- * Function to get user password using context
+ * Function to get user email using context
  */
 fun Context.getUserEmail(): String? {
     val pref = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -39,7 +40,7 @@ fun Context.setUserPW(pw: String) {
 }
 
 /**
- * Function to get user email using context
+ * Function to get user password using context
  */
 fun Context.getUserPw(): String? {
     val pref = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -48,7 +49,23 @@ fun Context.getUserPw(): String? {
 
 
 
+/**
+ * Extension function that can save memberIdx using Context
+ */
+fun Context.setUserMemberIdx(memberIdx: String) {
+    val pref = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    val editor = pref.edit()
+    editor.putString(PREF_MEMBER_IDX, memberIdx)
+    editor.apply()
+}
 
+/**
+ * Function to get user memberIdx using context
+ */
+fun Context.getUserMemberIdx(): String? {
+    val pref = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    return pref.getString(PREF_MEMBER_IDX, "143")
+}
 
 
 /**

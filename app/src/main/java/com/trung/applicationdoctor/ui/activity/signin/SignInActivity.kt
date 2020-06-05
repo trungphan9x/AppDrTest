@@ -11,6 +11,7 @@ import com.trung.applicationdoctor.util.extension.setUserPW
 import com.trung.applicationdoctor.ui.activity.main.MainActivity
 import com.trung.applicationdoctor.util.AppDialog
 import com.trung.applicationdoctor.util.UIEvent
+import com.trung.applicationdoctor.util.extension.setUserMemberIdx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -41,6 +42,7 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
                 LOG_IN_SUCCESS -> {
                     context.setUserEmail(viewModel.email.get().toString())
                     context.setUserPW(viewModel.password.get().toString())
+
 
                     MainActivity.startActivity(this)
                     viewModel.isLoading.set(false)

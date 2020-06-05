@@ -27,12 +27,12 @@ class ListChannelFragment : BaseFragment<FragmentListChannelBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         //tab name info which is passed here when ListChannelFragment is created to distinguish different tabs sharing the same ListChannelFragment
-        arguments?.let {
-            viewModel.tabInformation.set(ChannelCategory(
-                categoryIdx = it.getString(ARG_TAB_ID)!!,
-                categoryName = it.getString(ARG_TAB_NAME)!!
-            ))
-        }
+//        arguments?.let {
+//            viewModel.tabInformation.set(ChannelCategory(
+//                categoryIdx = it.getString(ARG_TAB_ID)!!,
+//                categoryName = it.getString(ARG_TAB_NAME)!!
+//            ))
+//        }
 
         binding.lifecycleOwner = this
 
@@ -40,7 +40,10 @@ class ListChannelFragment : BaseFragment<FragmentListChannelBinding>() {
         binding.mainVM = mainViewModel
 
         //get items from API after having tabs name is bound TabLayout
-        viewModel.getItemsFromApi()
+        arguments?.let {
+            viewModel.getItemsFromApi(it.getString(ARG_TAB_ID)!!, it.getString(ARG_TAB_NAME)!!)
+        }
+
 
         //Init Adapter Of recyclerview
         binding.rvListChannel.adapter = adapter
