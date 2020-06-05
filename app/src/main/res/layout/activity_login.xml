@@ -20,9 +20,9 @@
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:background="@android:color/transparent"
-            android:padding="23dp"
+            android:padding="15dp"
+            android:onClick="@{viewModel::clickBackBtn}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_navigate_before_tealish_24dp" />
@@ -61,9 +61,8 @@
             android:layout_height="56dp"
             android:layout_marginTop="6dp"
             android:layout_marginRight="20dp"
-            android:hint="@string/email_hint"
-            android:textSize="16sp"
             android:textColorHint="@color/light_blue_grey"
+            android:textSize="16sp"
             android:letterSpacing="-0.04"
             android:lineSpacingExtra="8sp"
             android:background="@drawable/background_text_input_layout"
@@ -81,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:addTextChangedListener="@{viewModel.emailTextWatcher}"
                 android:background="@null"
-
+                android:hint="@string/email_hint"
                 android:inputType="textEmailAddress"
                 android:paddingTop="8dp"
                 android:paddingBottom="2dp"
@@ -89,7 +88,8 @@
                 android:textColor="@color/black"
                 android:textSize="14dp"
                 android:theme="@style/AppDoctorTextInputStyle"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:textColorHint="@color/light_blue_grey"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,9 +112,8 @@
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginTop="6dp"
-            android:hint="@string/pw_hint"
-            android:textSize="16sp"
             android:textColorHint="@color/light_blue_grey"
+            android:textSize="16sp"
             android:letterSpacing="-0.04"
             android:lineSpacingExtra="8sp"
             android:background="@drawable/background_text_input_layout"
@@ -124,15 +123,16 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_sign_password"
-                isShowValidButton="@{viewModel.isForcePasswordError() ? true :!(viewModel.password.length() == 0) || (!(viewModel.password.length() == 0) &amp;&amp; !viewModel.isPasswordFocused())}"
+                isShowValidButton="@{viewModel.isForcePasswordError() ? true :   !(viewModel.password.length() == 0) || (!(viewModel.password.length() == 0) &amp;&amp; !viewModel.isPasswordFocused())}"
                 onFocusChangeListener="@{viewModel.getOnChangeFocused()}"
                 showClearButton="@{viewModel.isForcePasswordError() ? false :!(viewModel.password.length() == 0) &amp;&amp; viewModel.isPasswordFocused()}"
-                showValidButton="@{viewModel.isForcePasswordError() ? false : true}"
+                showValidButton="@{viewModel.isForcePasswordError() ? false : (viewModel.password.length() > 5) }"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:addTextChangedListener="@{viewModel.passwordTextWatcher}"
                 android:background="@null"
-                android:hint=""
+                android:hint="@string/pw_hint"
+                android:textColorHint="@color/light_blue_grey"
                 android:inputType="textPassword"
                 android:paddingTop="8dp"
                 android:paddingBottom="2dp"
@@ -160,8 +160,9 @@
             app:buttonEnableTextColor="@color/white"
             app:buttonText="@string/login_text_button"
             buttonTextSize="16sp"
-            app:setEnable="@{true}"
-            app:setLoading="@{viewModel.isLoading()}"
+            android:clickable="@{!viewModel.isLoading()}"
+            setLoading="@{viewModel.isLoading}"
+            app:setEnable="@{viewModel.checkEmailValid(viewModel.email) &amp;&amp; viewModel.password.length() > 5 }"
             />
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -185,6 +186,48 @@
             android:layout_marginLeft="6dp"
             app:layout_constraintStart_toEndOf="@id/btnCheckBox"
             app:layout_constraintTop_toTopOf="@+id/btnCheckBox"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dp"
+            android:layout_height="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/cloudy_blue"
+            android:layout_marginBottom="38dp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_find_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/tealish"
+            android:letterSpacing="-0.04"
+            android:lineSpacingExtra="7sp"
+            android:gravity="center_horizontal"
+            android:text="@string/find_id"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintEnd_toStartOf="@id/divider"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_change_pw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/tealish"
+            android:letterSpacing="-0.04"
+            android:lineSpacingExtra="7sp"
+            android:gravity="center_horizontal"
+            android:text="@string/change_pw"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintStart_toEndOf="@id/divider"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,25 +11,28 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.trung.applicationdoctor.R
 import com.trung.applicationdoctor.base.CustomPagerAdapter
-import com.trung.applicationdoctor.data.db.entity.ChannelCategoryEntity
-import com.trung.applicationdoctor.data.db.entity.ChannelListEntity
 import com.trung.applicationdoctor.data.remote.response.ChannelCategory
 import com.trung.applicationdoctor.data.remote.response.ChannelList
+import com.trung.applicationdoctor.di.GlideApp
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelAdapter
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelFragment
-import com.trung.applicationdoctor.ui.fragment.list.ListChannelViewModel
 
 @BindingAdapter("setUrlPhoto")
 fun ImageView.setUrlImage(url: String?) {
-    Glide.with(this.context)
+    GlideApp.with(this.context)
         .load(url)
+        .apply {
+            RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(false)
+        }
         .placeholder(R.drawable.ic_default)
-//        .error(R.drawable.bg_error_image)
         .centerCrop()
         .fitCenter()
         .into(this)
@@ -81,10 +84,10 @@ fun TextInputLayout.isErrorHint(hasError: Boolean) {
 }
 
 /**
- * 유효 버튼 보여주는 함수
- * 유효성 상태에 따라 적절한 아이콘을 보여준다
- * @param isValid 유효성 여부
- * @param isShow 보여줄지
+ * Valid button showing function
+ * Shows the appropriate icon according to the validity status
+ * Whether @param isValid is valid
+ * @param isShow
  */
 @BindingAdapter("showValidButton", "isShowValidButton", requireAll = true)
 fun TextInputEditText.showValidButton(isValid: Boolean, isShow: Boolean) {
@@ -103,9 +106,9 @@ fun TextInputEditText.setOnFocusChangeListener(listener: View.OnFocusChangeListe
 }
 
 /**
- * 상황에 따라서 입력창에 클리어 버튼 유무를 정해주는 함수
- * 그리고 그 버튼 터치시 삭제될 수 있게 기능 추가
- * @param isShow 보이는 여부
+ * Function to determine the presence or absence of a clear button in the input window depending on the situation
+ * Also, the function can be deleted when the button is touched.
+ * Whether @param isShow is visible
  */
 @BindingAdapter("showClearButton")
 fun TextInputEditText.showClearButton(isShow: Boolean) {
@@ -149,9 +152,9 @@ fun View.setClickWithDebounce(action: () -> Unit) {
 }
 
 /**
- * 상태에 따라서 배경색을 리턴해주는 함수
- * @param focused 부모 뷰의 포커스 여부
- * @param isError 오류가 있는지
+ * Function that returns the background color according to the status
+ * @param focused Whether the parent view is focused
+ * @param isError error
  */
 @BindingAdapter("isParentFocused", "isViewError", requireAll = true)
 fun View.isErrorBackground(focused: Boolean, isError: Boolean) {

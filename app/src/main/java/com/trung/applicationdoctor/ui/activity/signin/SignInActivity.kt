@@ -8,7 +8,9 @@ import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
 import com.trung.applicationdoctor.R
 import com.trung.applicationdoctor.base.BaseActivity
 import com.trung.applicationdoctor.databinding.ActivityLoginBinding
+import com.trung.applicationdoctor.extension.hasFirstLaunchApp
 import com.trung.applicationdoctor.extension.setUserEmail
+import com.trung.applicationdoctor.extension.setUserPW
 import com.trung.applicationdoctor.ui.activity.main.MainActivity
 import com.trung.applicationdoctor.util.UIEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,8 +39,16 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
             when (it.first) {
                 LOG_IN_SUCCESS -> {
                     context.setUserEmail(viewModel.email.get().toString())
+                    context.setUserPW(viewModel.password.get().toString())
 
                     MainActivity.startActivity(this)
+                    viewModel.isLoading.set(false)
+                }
+
+                IGNORE_LOG_IN -> {
+                    context.setUserEmail("ttt@gmail.com")
+                    MainActivity.startActivity(this)
+                    viewModel.isLoading.set(false)
                 }
 
                 LOG_IN_FAIL -> {
@@ -47,6 +57,7 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
                         dialog.dismiss()
                     })
                     alertDialog.show()
+                    viewModel.isLoading.set(false)
                 }
 
                 else -> {
@@ -62,5 +73,6 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
     companion object {
         const val LOG_IN_SUCCESS = 0
         const val LOG_IN_FAIL = 1
+        const val IGNORE_LOG_IN = 2
     }
 }

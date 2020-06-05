@@ -42,7 +42,7 @@ class DetailViewModel(private val channelDetailRoomRepository: ChannelDetailRoom
                         channelDetail.set(it)
 
                     } else {
-                        _uiEvent.postValue(UIEvent(NO_INTERNET_AND_NO_DATA_IN_ROOM))
+                        _uiEvent.postValue(UIEvent(NO_INTERNET_AND_NO_DATA_IN_ROOM, "You have no internet connect to open the page"))
                     }
                 }
             }

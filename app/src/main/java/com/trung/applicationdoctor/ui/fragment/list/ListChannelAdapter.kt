@@ -7,9 +7,11 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
 import com.trung.applicationdoctor.data.db.entity.ChannelListEntity
 import com.trung.applicationdoctor.data.remote.response.ChannelList
 import com.trung.applicationdoctor.databinding.ItemListChannelBinding
+import com.trung.applicationdoctor.di.GlideApp
 import com.trung.applicationdoctor.extension.hideKeyboard
 import java.util.*
 import kotlin.collections.ArrayList
@@ -82,6 +84,12 @@ class ListChannelAdapter : ListAdapter<ChannelList, ListChannelAdapter.ViewHolde
             binding.executePendingBindings()
         }
     }
+
+//    override fun onViewRecycled(holder: ViewHolder) {
+//        super.onViewRecycled(holder)
+//
+//        GlideApp.with(context).clear(binding.ivPhotoUrl)
+//    }
 
     override fun getFilter(): Filter {
         return object : Filter() {

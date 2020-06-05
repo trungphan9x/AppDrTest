@@ -1,8 +1,10 @@
 package com.trung.applicationdoctor.util
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
@@ -65,6 +67,9 @@ class LoadingButton(context: Context, attrs: AttributeSet) : FrameLayout(context
         lp.gravity = Gravity.CENTER
         progressBar.setPadding(8, 8, 8, 8)
         progressBar.layoutParams = lp
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            progressBar.setIndeterminateTintList(ColorStateList.valueOf(Color.parseColor("#FFFFFF")))
+        }
         super.addView(progressBar)
     }
 

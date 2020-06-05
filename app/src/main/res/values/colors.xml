@@ -18,4 +18,6 @@
     <color name="colorPrimaryText">#FFFFFF</color>
     <color name="colorValid">#f8e71c</color>
     <color name="colorEditTextNormal">#4ce7e6e7</color>
+    <color name="yellow">#f8e71c</color>
+    <color name="ripple_tab_color">#95F0FC</color>
 </resources>

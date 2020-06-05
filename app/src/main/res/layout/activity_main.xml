@@ -98,12 +98,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
+                android:layout_marginLeft="20dp"
                 android:elevation="1dp"
                 app:tabGravity="fill"
-                app:tabIndicatorFullWidth="false"
+                app:tabRippleColor="@color/ripple_tab_color"
+                app:tabIndicatorFullWidth="true"
                 app:tabIndicatorHeight="2dp"
                 app:tabMode="scrollable"
-                app:tabSelectedTextColor="@color/tealish" />
+                app:tabSelectedTextColor="@color/tealish"
+                app:tabMinWidth="50dp"
+                android:clipToPadding="false"
+                app:tabPaddingStart="16dp"
+                app:tabPaddingEnd="16dp"/>
         </androidx.viewpager.widget.ViewPager>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

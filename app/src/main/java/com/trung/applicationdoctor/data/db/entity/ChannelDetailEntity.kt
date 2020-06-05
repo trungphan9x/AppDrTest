@@ -23,6 +23,6 @@ data class ChannelDetailEntity (
     @ColumnInfo(name = "myLikeYn") val myLikeYn: String?,
     @ColumnInfo(name = "myScrapYn") val myScrapYn: String?,
     @ColumnInfo(name = "category") val category: String?,
-    val timestamp: Long = System.currentTimeMillis()
+    @ColumnInfo(name = "timestamp") val timestamp: Long? = System.currentTimeMillis()
 
 )

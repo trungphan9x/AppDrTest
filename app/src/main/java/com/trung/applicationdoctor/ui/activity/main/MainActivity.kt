@@ -14,6 +14,7 @@ import com.trung.applicationdoctor.base.BaseActivity
 import com.trung.applicationdoctor.base.CustomPagerAdapter
 import com.trung.applicationdoctor.databinding.ActivityMainBinding
 import com.trung.applicationdoctor.extension.hideKeyboard
+import com.trung.applicationdoctor.extension.setHasFirstLauchApp
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelFragment
 import com.trung.applicationdoctor.util.UIEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,6 +29,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.setHasFirstLauchApp(false)
 
         binding.lifecycleOwner = this
         binding.vm = viewModel
