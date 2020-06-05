@@ -1,4 +1,4 @@
-package com.trung.applicationdoctor.base
+package com.trung.applicationdoctor.core
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

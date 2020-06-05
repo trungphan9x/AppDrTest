@@ -10,11 +10,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.trung.applicationdoctor.R
-import com.trung.applicationdoctor.base.BaseActivity
-import com.trung.applicationdoctor.base.CustomPagerAdapter
+import com.trung.applicationdoctor.core.BaseActivity
+import com.trung.applicationdoctor.core.CustomPagerAdapter
 import com.trung.applicationdoctor.databinding.ActivityMainBinding
-import com.trung.applicationdoctor.extension.hideKeyboard
-import com.trung.applicationdoctor.extension.setHasFirstLauchApp
+import com.trung.applicationdoctor.util.extension.hideKeyboard
+import com.trung.applicationdoctor.util.extension.setHasFirstLauchApp
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelFragment
 import com.trung.applicationdoctor.util.UIEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,18 +41,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         initSearchBar()
     }
-
+    /**
+     * Function which observe the UI events sent from viewModel to process them
+     */
     override fun onUiEvent() = Observer<UIEvent<Int>> {
         it.getContentIfNotHandled()?.let {
             when (it.first) {
-//                CLICK_SEARCH -> {
-//                    viewModel.isSearchDisplayed.set(true)
-//                    binding.photoSearch.onActionViewExpanded()
-//                }
             }
         }
     }
 
+    /**
+     * Initiate PagerAdapter and TabLayout
+     */
     private fun initPagerAdapterAndTabs() {
         customPagerAdapter = CustomPagerAdapter(supportFragmentManager)
         customPagerAdapter.addFragment(ListChannelFragment.newInstance(tabName = getString(R.string.all), tabId = getString(R.string.all)), getString(R.string.all))
@@ -73,6 +74,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         })
     }
 
+    /**
+     * Initiate SearchBar
+     */
     private fun initSearchBar() {
         binding.photoSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -86,10 +90,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         })
 
+        //If SearchBar is displayed, title of MainActivity is invisible
         binding.photoSearch.setOnSearchClickListener(View.OnClickListener {
             viewModel.isSearchDisplayed.set(true)
         })
 
+        //if click close btn of search bar, remove keyword and close soft keyboard
         binding.photoSearch.findViewById<ImageView>(R.id.search_close_btn).setOnClickListener {
             //remove keyword
             binding.photoSearch.findViewById<TextView>(R.id.search_src_text).text = ""

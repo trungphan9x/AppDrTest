@@ -7,12 +7,9 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
-import com.trung.applicationdoctor.data.db.entity.ChannelListEntity
 import com.trung.applicationdoctor.data.remote.response.ChannelList
 import com.trung.applicationdoctor.databinding.ItemListChannelBinding
-import com.trung.applicationdoctor.di.GlideApp
-import com.trung.applicationdoctor.extension.hideKeyboard
+import com.trung.applicationdoctor.util.extension.hideKeyboard
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -63,7 +60,7 @@ class ListChannelAdapter : ListAdapter<ChannelList, ListChannelAdapter.ViewHolde
 
     /**
      * The ViewHolder constructor takes the binding variable from the associated
-     * ItemPhotolist, which nicely gives it access to the full [photoDetailEntity] information.
+     * ItemPhotolist, which nicely gives it access to the full [channelList] information.
      */
     class ViewHolder(private val binding: ItemListChannelBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -123,7 +120,7 @@ class ListChannelAdapter : ListAdapter<ChannelList, ListChannelAdapter.ViewHolde
     }
 
     /**
-     * Allows the RecyclerView to determine which items have changed when the [List] of [PhotoDetailEntity]
+     * Allows the RecyclerView to determine which items have changed when the [List] of [ChannelList]
      * has been updated.
      */
     companion object DiffCallback : DiffUtil.ItemCallback<ChannelList>() {

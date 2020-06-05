@@ -3,7 +3,6 @@ package com.trung.applicationdoctor.data.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.trung.applicationdoctor.data.enums.YesNo
 
 @Entity(tableName = "channel_list")
 data class ChannelListEntity (

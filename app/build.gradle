@@ -109,6 +109,10 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$version_retrofit"
     //implementation "com.squareup.retrofit2:converter-scalars:$version_retrofit"
 
+    //okhttp3
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+
     //Moshi
 //    implementation "com.squareup.moshi:moshi:$version_moshi"
 //    implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
@@ -119,12 +123,7 @@ dependencies {
     //Gson
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    //okhttp3
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
-    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
-
-
-    //
+    //multidex
     implementation 'androidx.multidex:multidex:2.0.1'
 
     //debug DB

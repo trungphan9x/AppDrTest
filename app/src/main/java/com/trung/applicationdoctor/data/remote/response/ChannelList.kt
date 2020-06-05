@@ -1,7 +1,6 @@
 package com.trung.applicationdoctor.data.remote.response
 
 import com.google.gson.annotations.SerializedName
-import com.trung.applicationdoctor.data.enums.YesNo
 
 data class ChannelList (
     @SerializedName("board_idx") val boardIdx: String,

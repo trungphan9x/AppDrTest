@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.trung.applicationdoctor.R
-import com.trung.applicationdoctor.base.CustomPagerAdapter
+import com.trung.applicationdoctor.core.CustomPagerAdapter
 import com.trung.applicationdoctor.data.remote.response.ChannelCategory
 import com.trung.applicationdoctor.data.remote.response.ChannelList
 import com.trung.applicationdoctor.di.GlideApp

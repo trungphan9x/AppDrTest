@@ -1,4 +1,4 @@
-package com.trung.applicationdoctor.extension
+package com.trung.applicationdoctor.util.extension
 
 import android.content.Context
 

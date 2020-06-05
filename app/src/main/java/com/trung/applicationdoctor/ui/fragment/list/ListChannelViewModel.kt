@@ -5,58 +5,95 @@ import androidx.lifecycle.viewModelScope
 import com.trung.applicationdoctor.ApplicationDoctor
 import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
 import com.trung.applicationdoctor.R
-import com.trung.applicationdoctor.base.BaseViewModel
+import com.trung.applicationdoctor.core.BaseViewModel
 import com.trung.applicationdoctor.data.remote.response.ChannelCategory
 import com.trung.applicationdoctor.data.remote.response.ChannelList
 import com.trung.applicationdoctor.data.repository.api.ChannelApiRepository
-import com.trung.applicationdoctor.data.repository.room.ChannelCategoryRoomRepository
 import com.trung.applicationdoctor.data.repository.room.ChannelListRoomRepository
-import com.trung.applicationdoctor.extension.getUserEmail
-import com.trung.applicationdoctor.extension.isNetworkConnected
+import com.trung.applicationdoctor.util.extension.getUserEmail
+import com.trung.applicationdoctor.util.extension.isNetworkConnected
+import com.trung.applicationdoctor.ui.fragment.list.ListChannelFragment.Companion.ERROR_MESSAGE
+import com.trung.applicationdoctor.util.UIEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ListChannelViewModel (private val channelApiRepository: ChannelApiRepository,
-                            private val channelCategoryRoomRepository: ChannelCategoryRoomRepository,
                             private val channelListRoomRepository: ChannelListRoomRepository
 ) : BaseViewModel() {
     val tabInformation = ObservableField<ChannelCategory>()
 
     val allItemsByCategory = ObservableField<List<ChannelList>>()
 
+    /**
+     * if it has internet, get all items for RecyclerView in fragment_list_channel.xml from API and save them to ROOM incase of tab 전체,
+     * if it has internet, get specific items of specific tab for RecyclerView in fragment_list_channel.xml from API incase of other tabs,
+     * else if it has no internet, get all items or items of specific tab for RecyclerView in fragment_list_channel.xml from ROOM in case of tab 전체 or other tabs respectively
+     */
     fun getItemsFromApi() {
         viewModelScope.launch (Dispatchers.IO) {
             try {
                 if(ApplicationDoctor.context.isNetworkConnected){
                     if(tabInformation.get()?.categoryName == context.getString(R.string.all)) {
                         channelApiRepository.getChannelList(pageNum = 1, memberId = context.getUserEmail().toString()).let {
-                            allItemsByCategory.set(it.dataArray)
-                            insertAllToChannelListDb(it.dataArray)
+                            when (it.code) {
+                                "1000" -> {
+                                    allItemsByCategory.set(it.dataArray)
+                                    insertAllToChannelListDb(it.dataArray)
+                                }
+
+                                else -> {
+                                    _uiEvent.postValue(UIEvent(ERROR_MESSAGE, it.codeMsg))
+                                }
+                            }
+
                         }
                     }else {
                         channelApiRepository.getChannelList(pageNum = 1, memberId = context.getUserEmail().toString(), categoryId = tabInformation.get()?.categoryIdx).let {
-                            allItemsByCategory.set(it.dataArray)
+                            when (it.code) {
+                                "1000" -> {
+                                    allItemsByCategory.set(it.dataArray)
+                                }
+
+                                else -> {
+                                    _uiEvent.postValue(UIEvent(ERROR_MESSAGE, it.codeMsg))
+                                }
+                            }
+
                         }
                     }
                 } else {
                     if(tabInformation.get()?.categoryName == context.getString(R.string.all)) {
                         channelListRoomRepository.getListAll().let {
-                            allItemsByCategory.set(it)
+                            if(it != null) {
+                                allItemsByCategory.set(it)
+                            } else {
+                                _uiEvent.postValue(UIEvent(ERROR_MESSAGE, "You have no internet connection"))
+                            }
+
                         }
 
                     }else {
                         channelListRoomRepository.getListByCategory(tabInformation.get()?.categoryName!!).let {
-                            allItemsByCategory.set(it)
+                            if(it != null) {
+                                allItemsByCategory.set(it)
+                            } else {
+                                _uiEvent.postValue(UIEvent(ERROR_MESSAGE, "You have no internet connection"))
+                            }
                         }
                     }
                 }
 
             } catch (ex: Exception) {
 
+            } finally {
+
             }
         }
     }
 
+    /**
+     * Insert all list of tab 전체 which got from API into ROOM for reading offline
+     */
     private fun insertAllToChannelListDb(listChannelList: List<ChannelList>) {
         viewModelScope.launch (Dispatchers.IO){
             channelListRoomRepository.insertAll(listChannelList)

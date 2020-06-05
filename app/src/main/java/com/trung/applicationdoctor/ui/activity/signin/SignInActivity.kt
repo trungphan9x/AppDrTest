@@ -1,17 +1,15 @@
 package com.trung.applicationdoctor.ui.activity.signin
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
 import com.trung.applicationdoctor.R
-import com.trung.applicationdoctor.base.BaseActivity
+import com.trung.applicationdoctor.core.BaseActivity
 import com.trung.applicationdoctor.databinding.ActivityLoginBinding
-import com.trung.applicationdoctor.extension.hasFirstLaunchApp
-import com.trung.applicationdoctor.extension.setUserEmail
-import com.trung.applicationdoctor.extension.setUserPW
+import com.trung.applicationdoctor.util.extension.setUserEmail
+import com.trung.applicationdoctor.util.extension.setUserPW
 import com.trung.applicationdoctor.ui.activity.main.MainActivity
+import com.trung.applicationdoctor.util.AppDialog
 import com.trung.applicationdoctor.util.UIEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,13 +18,10 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
 
 
     private val viewModel by viewModel(SignInViewModel::class)
-    private lateinit var alertDialog : AlertDialog.Builder
     override fun getLayoutResId() = R.layout.activity_login
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        alertDialog = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert)
-
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
@@ -34,6 +29,12 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
 
     }
 
+    /**
+     * Function which observe the UI events sent from viewModel to process them
+     * LOG_IN_SUCCESS: save user and password to SharePreference, start MainActivity and stop loading on button SignIn
+     * IGNORE_LOG_IN: ignore inputting username and password to redirect to MainActivity for Testing APP
+     * LOG_IN_FAIL: in case logging in is failed, a dialog is shown to notify the exact error
+     */
     override fun onUiEvent() = Observer<UIEvent<Int>> {
         it.getContentIfNotHandled()?.let {
             when (it.first) {
@@ -52,11 +53,7 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
                 }
 
                 LOG_IN_FAIL -> {
-                    alertDialog.setMessage(it.second.toString())
-                    alertDialog.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
-                        dialog.dismiss()
-                    })
-                    alertDialog.show()
+                    AppDialog.showDialog(this, it.second.toString())
                     viewModel.isLoading.set(false)
                 }
 

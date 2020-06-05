@@ -10,7 +10,7 @@ class ChannelListRoomRepository(private val channelListDao: ChannelListDao) {
 
     val allChannelList: LiveData<List<ChannelList>> = Transformations.map(channelListDao.getChannelList()) {
         val listChannelList = ArrayList<ChannelList>()
-        it.forEach {channelListEntity ->
+        it?.forEach {channelListEntity ->
             listChannelList.add(
                 ChannelList(
                     boardIdx = channelListEntity.boardIdx,
@@ -30,9 +30,9 @@ class ChannelListRoomRepository(private val channelListDao: ChannelListDao) {
         return@map listChannelList
     }
 
-    suspend fun getListAll(): List<ChannelList> {
+    suspend fun getListAll(): List<ChannelList>? {
         val listChannelListAll = ArrayList<ChannelList>()
-        channelListDao.getListAll().forEach {
+        channelListDao.getListAll()?.forEach {
             listChannelListAll.add(
                 ChannelList(
                     boardIdx = it.boardIdx,
@@ -51,9 +51,9 @@ class ChannelListRoomRepository(private val channelListDao: ChannelListDao) {
         return listChannelListAll
     }
 
-    suspend fun getListByCategory(category: String): List<ChannelList> {
+    suspend fun getListByCategory(category: String): List<ChannelList>? {
         val listChannelListByCategory = ArrayList<ChannelList>()
-        channelListDao.getListByCategory(category).forEach {
+        channelListDao.getListByCategory(category)?.forEach {
             listChannelListByCategory.add(
                 ChannelList(
                     boardIdx = it.boardIdx,

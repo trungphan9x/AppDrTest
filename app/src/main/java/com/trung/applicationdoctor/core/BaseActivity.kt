@@ -1,4 +1,4 @@
-package com.trung.applicationdoctor.base
+package com.trung.applicationdoctor.core
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes

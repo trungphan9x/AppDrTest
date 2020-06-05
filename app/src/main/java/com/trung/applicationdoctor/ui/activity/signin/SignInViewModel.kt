@@ -7,13 +7,13 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
 import com.trung.applicationdoctor.R
-import com.trung.applicationdoctor.base.BaseViewModel
+import com.trung.applicationdoctor.core.BaseViewModel
 import com.trung.applicationdoctor.data.repository.api.SignApiRepository
-import com.trung.applicationdoctor.extension.*
 import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.IGNORE_LOG_IN
 import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.LOG_IN_FAIL
 import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.LOG_IN_SUCCESS
 import com.trung.applicationdoctor.util.UIEvent
+import com.trung.applicationdoctor.util.extension.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -45,7 +45,14 @@ class SignInViewModel(private val signApiRepository: SignApiRepository) : BaseVi
         }
     }
 
-
+    /**
+     * after the right email, password are inputted and signIn btn is clicked, Internet Connection will be checked
+     * If it has internet, Api will be called to validate username and password,
+     * ==> if it's valid, redirect to MainActivity, else dialog showing to notify the error
+     * If it has no internet, check if it is the 1st time user open the app
+     * ==> If it it's 1st time, dialog showing that "You have no internet connection",
+     * ==> else if username n password are the same as them of the 1st time inputted, then redirect to MainActivity else dialog showing "Either ID or Password is wrong"
+     */
     fun clickLogIn(view: View){
         isLoading.set(true)
         val email = email.get() ?: return
@@ -57,7 +64,7 @@ class SignInViewModel(private val signApiRepository: SignApiRepository) : BaseVi
                     signApiRepository.signIn(memberId = email, memberPw = password, deviceOS = "A", gcmKey = 2).let {
                         when(it.code) {
                             "1000" -> _uiEvent.postValue(UIEvent(LOG_IN_SUCCESS, it.codeMsg))
-                            "-1" -> _uiEvent.postValue(UIEvent(LOG_IN_FAIL, it.codeMsg))
+                            else -> _uiEvent.postValue(UIEvent(LOG_IN_FAIL, it.codeMsg))
                         }
                     }
                 }
@@ -81,6 +88,9 @@ class SignInViewModel(private val signApiRepository: SignApiRepository) : BaseVi
         }
     }
 
+    /**
+     * click Back btn to ignore the step of login and redirect to MainActivity
+     */
     fun clickBackBtn(view: View){
         _uiEvent.postValue(UIEvent(IGNORE_LOG_IN))
     }
