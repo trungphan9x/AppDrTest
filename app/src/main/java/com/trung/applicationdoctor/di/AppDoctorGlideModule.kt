@@ -16,6 +16,7 @@ class AppDoctorGlideModule : AppGlideModule() {
         builder.setDiskCache(
             InternalCacheDiskCacheFactory(context, "cache_app_doctor_", diskCacheSizeBytes.toLong())
         )
+        //
         builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_RGB_565))
     }
 
