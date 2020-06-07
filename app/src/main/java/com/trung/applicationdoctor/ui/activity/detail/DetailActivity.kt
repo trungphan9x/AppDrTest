@@ -11,7 +11,7 @@ import com.trung.applicationdoctor.databinding.ActivityDetailBinding
 import com.trung.applicationdoctor.util.AppDialog
 import com.trung.applicationdoctor.util.UIEvent
 
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class DetailActivity : BaseActivity<ActivityDetailBinding>() {
     private val viewModel by viewModel(DetailViewModel::class)
@@ -62,7 +62,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>() {
 
     companion object {
         private const val DETAIL_BOARD_ID = "detail_board_id"
-        const val NO_INTERNET_AND_NO_DATA_IN_ROOM = 0
         const val ERROR = 1
         fun startActivity(activity: Activity?, boardId: String) {
             Intent(activity, DetailActivity::class.java).apply {

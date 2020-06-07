@@ -12,7 +12,7 @@ import com.trung.applicationdoctor.ui.activity.main.MainActivity
 import com.trung.applicationdoctor.util.AppDialog
 import com.trung.applicationdoctor.util.UIEvent
 import com.trung.applicationdoctor.util.extension.setUserMemberIdx
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class SignInActivity : BaseActivity<ActivityLoginBinding>(){

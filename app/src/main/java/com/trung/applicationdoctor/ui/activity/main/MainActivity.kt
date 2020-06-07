@@ -7,8 +7,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import com.trung.applicationdoctor.R
 import com.trung.applicationdoctor.core.BaseActivity
 import com.trung.applicationdoctor.core.CustomPagerAdapter
@@ -17,7 +19,7 @@ import com.trung.applicationdoctor.util.extension.hideKeyboard
 import com.trung.applicationdoctor.util.extension.setHasFirstLauchApp
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelFragment
 import com.trung.applicationdoctor.util.UIEvent
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -67,8 +69,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
                 when (position) {
                     0 -> {
-                        viewModel.clickedTab.set(getString(R.string.all))
+                        viewModel.currentTab.set(getString(R.string.all))
                     }
+
+
                 }
             }
         })
@@ -105,6 +109,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             binding.root.hideKeyboard()
             binding.photoSearch.onActionViewCollapsed()
         }
+    }
+
+    private fun tabListener() {
+        binding.tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                val views = arrayListOf<View>()
+                tab.view.findViewsWithText(views, tab.text, View.FIND_VIEWS_WITH_TEXT)
+                views.forEach { view ->
+                    if (view is TextView) {
+                        TextViewCompat.setTextAppearance(view, R.style.tab_text_regular)
+                    }
+                }
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val views = arrayListOf<View>()
+                tab.view.findViewsWithText(views, tab.text, View.FIND_VIEWS_WITH_TEXT)
+                views.forEach { view ->
+                    if (view is TextView) {
+                        TextViewCompat.setTextAppearance(view, R.style.tab_text_bold)
+                    }
+                }
+            }
+        })
     }
 
     companion object {

@@ -55,7 +55,7 @@ class ChannelDetailRoomRepository(private val channelDetailDao: ChannelDetailDao
             )
         )
 
-    suspend fun insertAll(listChannelDetail: List<ChannelDetail>) {
+    suspend fun insertAll(listChannelDetail: List<ChannelDetail>) : List<Long>? {
         val listPhotoDetailEntity = ArrayList<ChannelDetailEntity>()
         listChannelDetail.forEach {
             listPhotoDetailEntity.add(
@@ -80,7 +80,7 @@ class ChannelDetailRoomRepository(private val channelDetailDao: ChannelDetailDao
         return channelDetailDao.insertAll(listPhotoDetailEntity)
     }
 
-    suspend fun deleteAll() {
-        channelDetailDao.deleteAll()
+    suspend fun deleteAll() : Int? {
+        return channelDetailDao.deleteAll()
     }
 }

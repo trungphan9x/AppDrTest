@@ -7,7 +7,7 @@ import com.trung.applicationdoctor.data.db.entity.ChannelCategoryEntity
 import com.trung.applicationdoctor.data.remote.response.ChannelCategory
 
 class ChannelCategoryRoomRepository(private val channelCategoryDao: ChannelCategoryDao) {
-    //val allChannelCategory: LiveData<List<ChannelCategoryEntity>> = channelCategoryDao.getChannelCategory()
+    val allChannelCategoryEntity: LiveData<List<ChannelCategoryEntity>> = channelCategoryDao.getChannelCategory()
     val allChannelCategory: LiveData<List<ChannelCategory>> = Transformations.map(channelCategoryDao.getChannelCategory()) {
         val listChannelCategory = ArrayList<ChannelCategory>()
         it.forEach {channelCategoryEntity ->
@@ -32,7 +32,7 @@ class ChannelCategoryRoomRepository(private val channelCategoryDao: ChannelCateg
             )
         )
 
-    suspend fun insertAll(listChannelCategory: List<ChannelCategory>) {
+    suspend fun insertAll(listChannelCategory: List<ChannelCategory>) : List<Long>?  {
         val listChannelCategoryEntity = ArrayList<ChannelCategoryEntity>()
         listChannelCategory.forEach {
             listChannelCategoryEntity.add(
@@ -46,7 +46,7 @@ class ChannelCategoryRoomRepository(private val channelCategoryDao: ChannelCateg
         return channelCategoryDao.insertAll(listChannelCategoryEntity)
     }
 
-    suspend fun deleteAll() {
-        channelCategoryDao.deleteAll()
+    suspend fun deleteAll() : Int? {
+        return channelCategoryDao.deleteAll()
     }
 }

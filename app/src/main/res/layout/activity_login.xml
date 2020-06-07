@@ -33,7 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/spoqa_han_sans_bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnBack"
             android:text="로그인을 위해\n정보를 입력해주세요." />
@@ -47,6 +48,7 @@
             android:letterSpacing="-0.05"
             android:lineSpacingExtra="6sp"
             android:text="이메일"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
@@ -81,6 +83,7 @@
                 android:addTextChangedListener="@{viewModel.emailTextWatcher}"
                 android:background="@null"
                 android:hint="@string/email_hint"
+                android:fontFamily="@font/spoqa_han_sans_regular"
                 android:inputType="textEmailAddress"
                 android:paddingTop="8dp"
                 android:paddingBottom="2dp"
@@ -102,6 +105,7 @@
             android:letterSpacing="-0.05"
             android:lineSpacingExtra="6sp"
             android:text="비밀번호"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             android:layout_marginTop="9dp"
             app:layout_constraintStart_toStartOf="@id/tv_email"
             app:layout_constraintTop_toBottomOf="@+id/til_sign_email"/>
@@ -132,6 +136,7 @@
                 android:addTextChangedListener="@{viewModel.passwordTextWatcher}"
                 android:background="@null"
                 android:hint="@string/pw_hint"
+                android:fontFamily="@font/spoqa_han_sans_regular"
                 android:textColorHint="@color/light_blue_grey"
                 android:inputType="textPassword"
                 android:paddingTop="8dp"
@@ -159,6 +164,7 @@
             android:textAllCaps="false"
             app:buttonEnableTextColor="@color/white"
             app:buttonText="@string/login_text_button"
+            app:buttonTextFontFamily="@font/spoqa_han_sans_regular"
             buttonTextSize="16sp"
             android:clickable="@{!viewModel.isLoading()}"
             setLoading="@{viewModel.isLoading}"
@@ -184,6 +190,7 @@
             android:letterSpacing="-0.04"
             android:text="로그인저장"
             android:layout_marginLeft="6dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             app:layout_constraintStart_toEndOf="@id/btnCheckBox"
             app:layout_constraintTop_toTopOf="@+id/btnCheckBox"/>
 
@@ -209,6 +216,7 @@
             android:text="@string/find_id"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="32dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             app:layout_constraintEnd_toStartOf="@id/divider"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -224,6 +232,7 @@
             android:text="@string/change_pw"
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="32dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             app:layout_constraintStart_toEndOf="@id/divider"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

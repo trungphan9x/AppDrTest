@@ -38,6 +38,7 @@
             android:textColor="@color/tealish"
             android:letterSpacing="-0.05"
             android:lineSpacingExtra="4sp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_photo_url" />
 
@@ -53,6 +54,7 @@
             android:lineSpacingExtra="4sp"
             tools:text="10"
             android:text="@{channelList.replyCnt}"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_photo_url" />
 
@@ -77,6 +79,7 @@
             android:lineSpacingExtra="4sp"
             tools:text="56"
             android:text="@{channelList.likeCnt}"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             app:layout_constraintRight_toLeftOf="@+id/iv_comment"
             app:layout_constraintTop_toBottomOf="@+id/iv_photo_url" />
 
@@ -101,6 +104,7 @@
             android:text="@{channelList.title}"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_category" />
 
@@ -115,6 +119,7 @@
             tools:text="2019.10.19"
             android:text="@{channelList.insDate}"
             android:layout_marginLeft="16dp"
+            android:fontFamily="@font/spoqa_han_sans_regular"
             android:layout_marginBottom="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"

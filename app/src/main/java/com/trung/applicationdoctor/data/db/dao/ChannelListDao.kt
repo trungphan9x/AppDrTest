@@ -16,11 +16,11 @@ interface ChannelListDao {
     suspend fun getListByCategory(category: String): List<ChannelListEntity>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(channelList: ChannelListEntity)
+    suspend fun insert(channelList: ChannelListEntity) : Long?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(listChannelList: List<ChannelListEntity>)
+    suspend fun insertAll(listChannelList: List<ChannelListEntity>) : List<Long>?
 
     @Query("DELETE FROM channel_list")
-    suspend fun deleteAll()
+    suspend fun deleteAll() : Int?
 }

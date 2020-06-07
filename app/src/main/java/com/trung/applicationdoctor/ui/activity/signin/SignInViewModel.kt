@@ -4,21 +4,26 @@ package com.trung.applicationdoctor.ui.activity.signin
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
 import com.trung.applicationdoctor.R
 import com.trung.applicationdoctor.core.BaseViewModel
+import com.trung.applicationdoctor.data.remote.response.ChannelCategory
+import com.trung.applicationdoctor.data.remote.response.SignInInformation
 import com.trung.applicationdoctor.data.repository.api.SignApiRepository
 import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.IGNORE_LOG_IN
 import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.LOG_IN_FAIL
 import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.LOG_IN_SUCCESS
 import com.trung.applicationdoctor.util.UIEvent
 import com.trung.applicationdoctor.util.extension.*
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class SignInViewModel(private val signApiRepository: SignApiRepository) : BaseViewModel(), EmailTextInputViewModel, PasswordTextInputViewModel {
+class SignInViewModel(private val defaultDispatcher: CoroutineDispatcher,
+                      private val signApiRepository: SignApiRepository) : BaseViewModel(), EmailTextInputViewModel, PasswordTextInputViewModel {
     override val email = ObservableField<String>("")
     override val isEmailFocused = ObservableBoolean(true)
     override val isForceEmailError = ObservableBoolean(false)
@@ -29,6 +34,7 @@ class SignInViewModel(private val signApiRepository: SignApiRepository) : BaseVi
     val isLogInClicked = ObservableBoolean(false)
     val isLoading = ObservableBoolean(false)
 
+    val resultSignIn: MutableLiveData<SignInInformation> = MutableLiveData<SignInInformation>()
     /**
      * Input window focus change detection listener
      */
@@ -53,21 +59,24 @@ class SignInViewModel(private val signApiRepository: SignApiRepository) : BaseVi
      * ==> If it it's 1st time, dialog showing that "You have no internet connection",
      * ==> else if username n password are the same as them of the 1st time inputted, then redirect to MainActivity else dialog showing "Either ID or Password is wrong"
      */
-    fun clickLogIn(view: View){
+    fun clickLogIn(view: View? = null){
         isLoading.set(true)
         val email = email.get() ?: return
         val password = password.get() ?: return
 
         try {
             if(context.isNetworkConnected) {
-                viewModelScope.launch(Dispatchers.IO) {
-                    signApiRepository.signIn(memberId = email, memberPw = password, deviceOS = "A", gcmKey = 2).let {
-                        when(it.code) {
-                            "1000" -> {
-                                _uiEvent.postValue(UIEvent(LOG_IN_SUCCESS, it.codeMsg))
-                                context.setUserMemberIdx(it.memberIdx)
+                viewModelScope.launch(defaultDispatcher) {
+                    signApiRepository.signIn(memberId = email, memberPw = password, deviceOS = "A", gcmKey = 2).let { result ->
+                        result.data?.let {
+                            resultSignIn.postValue(it)
+                            when(it.code) {
+                                "1000" -> {
+                                    _uiEvent.postValue(UIEvent(LOG_IN_SUCCESS, it.codeMsg))
+                                    context.setUserMemberIdx(it.memberIdx)
+                                }
+                                else -> _uiEvent.postValue(UIEvent(LOG_IN_FAIL, it.codeMsg))
                             }
-                            else -> _uiEvent.postValue(UIEvent(LOG_IN_FAIL, it.codeMsg))
                         }
                     }
                 }
@@ -87,7 +96,7 @@ class SignInViewModel(private val signApiRepository: SignApiRepository) : BaseVi
         } catch (ex: Exception) {
             _uiEvent.postValue(UIEvent(LOG_IN_FAIL, ex.stackTrace))
         } finally {
-            view.hideKeyboard()
+            view?.hideKeyboard()
         }
     }
 

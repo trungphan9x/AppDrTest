@@ -6,13 +6,16 @@ import android.view.MotionEvent
 import android.view.View
 import android.webkit.WebView
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.trung.applicationdoctor.R
@@ -22,6 +25,7 @@ import com.trung.applicationdoctor.data.remote.response.ChannelList
 import com.trung.applicationdoctor.di.GlideApp
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelAdapter
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelFragment
+
 
 @BindingAdapter("setUrlPhoto")
 fun ImageView.setUrlImage(url: String?) {

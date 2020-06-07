@@ -13,11 +13,11 @@ interface ChannelCategoryDao {
     fun getChannelCategory(): LiveData<List<ChannelCategoryEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(channelCategory: ChannelCategoryEntity)
+    suspend fun insert(channelCategory: ChannelCategoryEntity): Long?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(listChannelCategory: List<ChannelCategoryEntity>)
+    suspend fun insertAll(listChannelCategory: List<ChannelCategoryEntity>) : List<Long>?
 
     @Query("DELETE FROM channel_category")
-    suspend fun deleteAll()
+    suspend fun deleteAll() : Int?
 }

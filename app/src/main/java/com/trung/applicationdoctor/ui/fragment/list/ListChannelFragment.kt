@@ -13,8 +13,8 @@ import com.trung.applicationdoctor.ui.activity.detail.DetailActivity
 import com.trung.applicationdoctor.ui.activity.main.MainViewModel
 import com.trung.applicationdoctor.util.AppDialog
 import com.trung.applicationdoctor.util.UIEvent
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class ListChannelFragment : BaseFragment<FragmentListChannelBinding>() {
     private val viewModel: ListChannelViewModel by viewModel()
@@ -27,12 +27,12 @@ class ListChannelFragment : BaseFragment<FragmentListChannelBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         //tab name info which is passed here when ListChannelFragment is created to distinguish different tabs sharing the same ListChannelFragment
-//        arguments?.let {
-//            viewModel.tabInformation.set(ChannelCategory(
-//                categoryIdx = it.getString(ARG_TAB_ID)!!,
-//                categoryName = it.getString(ARG_TAB_NAME)!!
-//            ))
-//        }
+        arguments?.let {
+            viewModel.tabInformation.set(ChannelCategory(
+                categoryIdx = it.getString(ARG_TAB_ID)!!,
+                categoryName = it.getString(ARG_TAB_NAME)!!
+            ))
+        }
 
         binding.lifecycleOwner = this
 
@@ -40,10 +40,7 @@ class ListChannelFragment : BaseFragment<FragmentListChannelBinding>() {
         binding.mainVM = mainViewModel
 
         //get items from API after having tabs name is bound TabLayout
-        arguments?.let {
-            viewModel.getItemsFromApi(it.getString(ARG_TAB_ID)!!, it.getString(ARG_TAB_NAME)!!)
-        }
-
+        viewModel.getItemsFromApi()
 
         //Init Adapter Of recyclerview
         binding.rvListChannel.adapter = adapter

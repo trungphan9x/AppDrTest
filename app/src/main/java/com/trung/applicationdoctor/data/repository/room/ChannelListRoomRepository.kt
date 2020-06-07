@@ -32,21 +32,23 @@ class ChannelListRoomRepository(private val channelListDao: ChannelListDao) {
 
     suspend fun getListAll(): List<ChannelList>? {
         val listChannelListAll = ArrayList<ChannelList>()
-        channelListDao.getListAll()?.forEach {
-            listChannelListAll.add(
-                ChannelList(
-                    boardIdx = it.boardIdx,
-                    boardType = it.boardType,
-                    insDate = it.insDate,
-                    title = it.title,
-                    imgPath = it.imgPath,
-                    replyCnt = it.replyCnt,
-                    likeCnt = it.likeCnt,
-                    myLikeYn = it.myLikeYn,
-                    category = it.category,
-                    contentsYn = it.contentsYn
+        channelListDao.getListAll()?.let {
+            it.forEach {
+                listChannelListAll.add(
+                    ChannelList(
+                        boardIdx = it.boardIdx,
+                        boardType = it.boardType,
+                        insDate = it.insDate,
+                        title = it.title,
+                        imgPath = it.imgPath,
+                        replyCnt = it.replyCnt,
+                        likeCnt = it.likeCnt,
+                        myLikeYn = it.myLikeYn,
+                        category = it.category,
+                        contentsYn = it.contentsYn
+                    )
                 )
-            )
+            }
         }
         return listChannelListAll
     }
@@ -88,7 +90,7 @@ class ChannelListRoomRepository(private val channelListDao: ChannelListDao) {
             )
         )
 
-    suspend fun insertAll(listChannelList: List<ChannelList>) {
+    suspend fun insertAll(listChannelList: List<ChannelList>) : List<Long>?{
         val listChannelListEntity = ArrayList<ChannelListEntity>()
         listChannelList.forEach {
             listChannelListEntity.add(
@@ -109,7 +111,7 @@ class ChannelListRoomRepository(private val channelListDao: ChannelListDao) {
         return channelListDao.insertAll(listChannelListEntity)
     }
 
-    suspend fun deleteAll() {
-        channelListDao.deleteAll()
+    suspend fun deleteAll() : Int?{
+        return channelListDao.deleteAll()
     }
 }

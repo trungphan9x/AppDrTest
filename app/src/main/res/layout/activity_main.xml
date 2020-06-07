@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:letterSpacing="-0.04"
+                    android:fontFamily="@font/spoqa_han_sans_bold"
                     android:lineSpacingExtra="8sp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
@@ -115,11 +116,18 @@
                 app:tabIndicatorFullWidth="true"
                 app:tabIndicatorHeight="2dp"
                 app:tabMode="scrollable"
-                app:tabSelectedTextColor="@color/tealish"
                 app:tabMinWidth="50dp"
                 android:clipToPadding="false"
                 app:tabPaddingStart="16dp"
-                app:tabPaddingEnd="16dp"/>
+                app:tabPaddingEnd="16dp"
+                android:textSize="14sp"
+                android:fontFamily="@font/spoqa_han_sans_regular"
+                android:textColor="@color/black"
+                android:letterSpacing="-0.05"
+                android:lineSpacingExtra="6sp"
+                app:tabTextAppearance="@style/tab_text_regular"
+                app:tabTextColor="@color/black"
+                app:tabSelectedTextColor="@color/tealish"/>
         </androidx.viewpager.widget.ViewPager>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

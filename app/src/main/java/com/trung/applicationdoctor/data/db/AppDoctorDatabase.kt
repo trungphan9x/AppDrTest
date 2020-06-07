@@ -14,10 +14,10 @@ import com.trung.applicationdoctor.data.db.entity.ChannelListEntity
 import com.trung.applicationdoctor.data.db.entity.ChannelDetailEntity
 import com.trung.applicationdoctor.data.db.entity.ChannelCategoryEntity
 
-@Database(entities = [ChannelListEntity::class, ChannelCategoryEntity::class, ChannelDetailEntity::class], version = DB_VERSION, exportSchema = false)
+@Database(entities = [ChannelListEntity::class, ChannelCategoryEntity::class, ChannelDetailEntity::class], version = DB_VERSION)
 abstract class AppDoctorDatabase : RoomDatabase() {
-    abstract fun getChannelCategoryDao(): ChannelListDao
-    abstract fun getChannelListDao(): ChannelCategoryDao
+    abstract fun getChannelListDao(): ChannelListDao
+    abstract fun getChannelCategoryDao(): ChannelCategoryDao
     abstract fun getChannelDetailDao() : ChannelDetailDao
 
     companion object {

@@ -19,11 +19,11 @@ interface ChannelDetailDao {
     suspend fun getChannelDetail(boardIdx: String): ChannelDetailEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(channelDetail: ChannelDetailEntity)
+    suspend fun insert(channelDetail: ChannelDetailEntity) : Long?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(listChannelDetail: List<ChannelDetailEntity>)
+    suspend fun insertAll(listChannelDetail: List<ChannelDetailEntity>) : List<Long>?
 
     @Query("DELETE FROM channel_detail")
-    suspend fun deleteAll()
+    suspend fun deleteAll() : Int?
 }
