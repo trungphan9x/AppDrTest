@@ -27,6 +27,8 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
             null,
             true
         )
+
+        binding.lifecycleOwner = this
         return binding.root
     }
 

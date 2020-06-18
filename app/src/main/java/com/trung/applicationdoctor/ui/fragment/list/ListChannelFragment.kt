@@ -1,7 +1,9 @@
 package com.trung.applicationdoctor.ui.fragment.list
 
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
@@ -23,6 +25,7 @@ class ListChannelFragment : BaseFragment<FragmentListChannelBinding>() {
 
     override fun getLayoutResId() = R.layout.fragment_list_channel
 
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -34,8 +37,6 @@ class ListChannelFragment : BaseFragment<FragmentListChannelBinding>() {
             ))
         }
 
-        binding.lifecycleOwner = this
-
         binding.vm = viewModel
         binding.mainVM = mainViewModel
 
@@ -45,8 +46,10 @@ class ListChannelFragment : BaseFragment<FragmentListChannelBinding>() {
         //Init Adapter Of recyclerview
         binding.rvListChannel.adapter = adapter
 
-        adapter.setOnItemClickListener { i, channelList ->
-            DetailActivity.startActivity(requireActivity(), channelList.boardIdx)
+        adapter.setOnItemClickListener { position, channelList, view ->
+
+            DetailActivity.startActivity(requireActivity(), channelList.boardIdx, view)
+
         }
 
         //filter items in recyclerview based on keyword of searchbar

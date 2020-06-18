@@ -9,16 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
 import com.trung.applicationdoctor.R
 import com.trung.applicationdoctor.core.BaseViewModel
-import com.trung.applicationdoctor.data.remote.response.ChannelCategory
+import com.trung.applicationdoctor.data.enum.Status
 import com.trung.applicationdoctor.data.remote.response.SignInInformation
 import com.trung.applicationdoctor.data.repository.api.SignApiRepository
 import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.IGNORE_LOG_IN
-import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.LOG_IN_FAIL
 import com.trung.applicationdoctor.ui.activity.signin.SignInActivity.Companion.LOG_IN_SUCCESS
+import com.trung.applicationdoctor.util.ERROR_EVENT
 import com.trung.applicationdoctor.util.UIEvent
 import com.trung.applicationdoctor.util.extension.*
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -67,34 +66,47 @@ class SignInViewModel(private val defaultDispatcher: CoroutineDispatcher,
         try {
             if(context.isNetworkConnected) {
                 viewModelScope.launch(defaultDispatcher) {
-                    signApiRepository.signIn(memberId = email, memberPw = password, deviceOS = "A", gcmKey = 2).let { result ->
-                        result.data?.let {
-                            resultSignIn.postValue(it)
-                            when(it.code) {
-                                "1000" -> {
-                                    _uiEvent.postValue(UIEvent(LOG_IN_SUCCESS, it.codeMsg))
-                                    context.setUserMemberIdx(it.memberIdx)
+                    signApiRepository.signIn(memberId = email, memberPw = password, deviceOS = "A", gcmKey = 2).let { baseApiResult ->
+                        when (baseApiResult.status) {
+                            Status.SUCCESS -> {
+                                baseApiResult.data?.let { result ->
+                                    resultSignIn.postValue(result)
+                                    when(result.code) {
+                                        "1000" -> {
+                                            _uiEvent.postValue(UIEvent(LOG_IN_SUCCESS, result.codeMsg))
+                                            context.setUserMemberIdx(result.memberIdx)
+                                        }
+                                        else -> _uiEvent.postValue(UIEvent(ERROR_EVENT, result.codeMsg))
+                                    }
                                 }
-                                else -> _uiEvent.postValue(UIEvent(LOG_IN_FAIL, it.codeMsg))
+                            }
+
+                            Status.ERROR -> {
+                                _uiEvent.postValue(UIEvent(ERROR_EVENT, baseApiResult.message))
+                            }
+
+                            Status.LOADING -> {
+
                             }
                         }
+
                     }
                 }
             } else {
                 if(context.hasFirstLaunchApp()) {
-                    _uiEvent.postValue(UIEvent(LOG_IN_FAIL, "You have no internet connection"))
+                    _uiEvent.postValue(UIEvent(ERROR_EVENT, "You have no internet connection"))
                 } else {
                     if(email == context.getUserEmail() && password == context.getUserPw()) {
                         _uiEvent.postValue(UIEvent(LOG_IN_SUCCESS))
                     } else {
-                        _uiEvent.postValue(UIEvent(LOG_IN_FAIL, "Either ID or Password is wrong"))
+                        _uiEvent.postValue(UIEvent(ERROR_EVENT, "Either ID or Password is wrong"))
                     }
 
                 }
             }
 
         } catch (ex: Exception) {
-            _uiEvent.postValue(UIEvent(LOG_IN_FAIL, ex.stackTrace))
+            _uiEvent.postValue(UIEvent(ERROR_EVENT, ex.message))
         } finally {
             view?.hideKeyboard()
         }

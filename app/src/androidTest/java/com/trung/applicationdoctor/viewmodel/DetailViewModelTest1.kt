@@ -86,12 +86,11 @@ class DetailViewModelTest1 : KoinTest {
      */
     @Test
     fun getBoardIdAvailable() {
-
+        val viewModel = DetailViewModel(testDispatcher, roomRepository, apiRepository)
         runBlocking {
-            val viewModel = DetailViewModel(testDispatcher, roomRepository, apiRepository)
             viewModel.getDetailChannel("2")
-            delay(1000)
-            Truth.assertThat(viewModel.channelDetail.value.toString()).isNotEmpty()
+            delay(2000)
+            Truth.assertThat(viewModel.channelDetail.value.toString()).isEmpty()
 
 
             val roomResult = roomRepository.getChannelDetail("2")

@@ -10,6 +10,7 @@ import com.trung.applicationdoctor.util.extension.setUserEmail
 import com.trung.applicationdoctor.util.extension.setUserPW
 import com.trung.applicationdoctor.ui.activity.main.MainActivity
 import com.trung.applicationdoctor.util.AppDialog
+import com.trung.applicationdoctor.util.ERROR_EVENT
 import com.trung.applicationdoctor.util.UIEvent
 import com.trung.applicationdoctor.util.extension.setUserMemberIdx
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -23,7 +24,7 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.lifecycleOwner = this
+        //binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         viewModel.uiEvent.observe(this, onUiEvent())
@@ -54,7 +55,7 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
                     viewModel.isLoading.set(false)
                 }
 
-                LOG_IN_FAIL -> {
+                ERROR_EVENT -> {
                     AppDialog.showDialog(this, it.second.toString())
                     viewModel.isLoading.set(false)
                 }
@@ -71,7 +72,6 @@ class SignInActivity : BaseActivity<ActivityLoginBinding>(){
 
     companion object {
         const val LOG_IN_SUCCESS = 0
-        const val LOG_IN_FAIL = 1
-        const val IGNORE_LOG_IN = 2
+        const val IGNORE_LOG_IN = 1
     }
 }

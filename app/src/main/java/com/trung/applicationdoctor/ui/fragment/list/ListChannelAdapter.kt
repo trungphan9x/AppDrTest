@@ -1,6 +1,7 @@
 package com.trung.applicationdoctor.ui.fragment.list
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -18,7 +19,7 @@ class ListChannelAdapter : ListAdapter<ChannelList, ListChannelAdapter.ViewHolde
 
     lateinit var binding: ItemListChannelBinding
 
-    private var onItemClickListener: ((Int, ChannelList) -> Unit)? = null
+    private var onItemClickListener: ((Int, ChannelList, view: View) -> Unit)? = null
 
     var photoFilterList = ArrayList<ChannelList>()
 
@@ -38,7 +39,7 @@ class ListChannelAdapter : ListAdapter<ChannelList, ListChannelAdapter.ViewHolde
         return photoFilterList.size
     }
 
-    fun setOnItemClickListener(onItemClickListener: ((Int, ChannelList) -> Unit)) {
+    fun setOnItemClickListener(onItemClickListener: ((Int, ChannelList, View) -> Unit)) {
         this.onItemClickListener = onItemClickListener
     }
 
@@ -66,14 +67,14 @@ class ListChannelAdapter : ListAdapter<ChannelList, ListChannelAdapter.ViewHolde
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             channelList: ChannelList,
-            onItemClickListener: ((Int, ChannelList) -> Unit)?
+            onItemClickListener: ((Int, ChannelList, View) -> Unit)?
         ) {
 
             binding.channelList = channelList
 
             binding.root.setOnClickListener {
                 binding.root.hideKeyboard()
-                onItemClickListener?.invoke(position, channelList)
+                onItemClickListener?.invoke(position, channelList, binding.ivPhotoUrl)
             }
 
             // This is important, because it forces the data binding to execute immediately,

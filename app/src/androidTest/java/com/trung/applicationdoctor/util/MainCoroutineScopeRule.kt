@@ -18,7 +18,7 @@ class MainCoroutineScopeRule : TestRule {
     override fun apply(base: Statement, description: Description?) = object : Statement() {
         @Throws(Throwable::class)
         override fun evaluate() {
-            Dispatchers.setMain(testCoroutineDispatcher)
+            //Dispatchers.setMain(testCoroutineDispatcher)
             Dispatchers.setMain(Dispatchers.IO)
 
             base.evaluate()

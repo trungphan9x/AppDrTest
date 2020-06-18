@@ -1,10 +1,13 @@
 package com.trung.applicationdoctor.util
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
+import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
@@ -59,10 +62,14 @@ fun setTabTitle(viewPager: ViewPager, titles: List<ChannelCategory>?) {
     adapter.notifyDataSetChanged()
 }
 
+@SuppressLint("SetJavaScriptEnabled")
 @BindingAdapter("loadWebView")
-fun setWebView(webView: WebView, content: String?) {
+fun WebView.setWebView(content: String?) {
     content?.let {
-        webView.loadData(content, "text/html", "UTF-8")
+        this.settings.javaScriptEnabled = true
+        this.webViewClient = WebViewClient()
+        this.webChromeClient = WebChromeClient()
+        this.loadData(content, "text/html; charset=UTF-8", null)
     }
 }
 
@@ -174,4 +181,3 @@ fun View.isErrorBackground(focused: Boolean, isError: Boolean) {
         }
     }
 }
-

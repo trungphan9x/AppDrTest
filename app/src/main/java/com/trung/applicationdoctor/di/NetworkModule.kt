@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.trung.applicationdoctor.BuildConfig
 import com.trung.applicationdoctor.data.Constant
+import com.trung.applicationdoctor.module.network.ResponseHandler
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit
 val networkModule = module {
     factory { buildOkHttpClient() }
     single { buildRetrofit(get()) }
+    factory { ResponseHandler() }
 
 }
 

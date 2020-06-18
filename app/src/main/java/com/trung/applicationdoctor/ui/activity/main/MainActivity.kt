@@ -2,10 +2,12 @@ package com.trung.applicationdoctor.ui.activity.main
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.core.widget.TextViewCompat
 import androidx.lifecycle.Observer
@@ -18,6 +20,8 @@ import com.trung.applicationdoctor.databinding.ActivityMainBinding
 import com.trung.applicationdoctor.util.extension.hideKeyboard
 import com.trung.applicationdoctor.util.extension.setHasFirstLauchApp
 import com.trung.applicationdoctor.ui.fragment.list.ListChannelFragment
+import com.trung.applicationdoctor.util.AppDialog
+import com.trung.applicationdoctor.util.ERROR_EVENT
 import com.trung.applicationdoctor.util.UIEvent
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -29,12 +33,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun getLayoutResId() = R.layout.activity_main
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        window.allowEnterTransitionOverlap = false;
+        window.allowReturnTransitionOverlap = false;
         this.setHasFirstLauchApp(false)
 
-        binding.lifecycleOwner = this
         binding.vm = viewModel
 
         viewModel.uiEvent.observe(this, onUiEvent())
@@ -49,6 +54,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun onUiEvent() = Observer<UIEvent<Int>> {
         it.getContentIfNotHandled()?.let {
             when (it.first) {
+                ERROR_EVENT -> {
+                    AppDialog.showDialog(this, it.second.toString())
+                }
             }
         }
     }

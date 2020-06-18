@@ -1,25 +1,19 @@
 package com.trung.applicationdoctor.core
 
-import com.trung.applicationdoctor.module.network.InternetManager
-import com.trung.applicationdoctor.module.network.NetworkExceptionUtil
-import com.trung.applicationdoctor.module.network.NoInternetException
-import com.trung.applicationdoctor.module.unittets.UnitTestManager
+import com.trung.applicationdoctor.module.network.ResponseHandler
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-abstract class BaseRepository {
-    suspend fun <_Response> safeApi(
-        callApi: suspend () -> _Response
-    ): BaseApiResult<_Response> {
+abstract class BaseRepository : KoinComponent {
+    val responseHandler : ResponseHandler by inject()
+
+    suspend fun <T> safeApi(callApi: suspend () -> T): BaseApiResult<T> {
         try {
-            if (!UnitTestManager.enable) {
-                if (!InternetManager.available) {
-                    throw NoInternetException()
-                }
-            }
             callApi.invoke().let {response ->
-                return BaseApiResult<_Response>(response)
+                return responseHandler.handleSuccess(response)
             }
         } catch (ex: Exception) {
-            return BaseApiResult<_Response>(null, NetworkExceptionUtil.error2String(ex))
+            return responseHandler.handleException(ex)
         }
     }
 }

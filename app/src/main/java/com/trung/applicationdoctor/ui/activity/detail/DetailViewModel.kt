@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.trung.applicationdoctor.ApplicationDoctor.Companion.context
 import com.trung.applicationdoctor.core.BaseViewModel
+import com.trung.applicationdoctor.data.enum.Status
 import com.trung.applicationdoctor.data.remote.response.ChannelDetail
 import com.trung.applicationdoctor.data.repository.api.ChannelApiRepository
 import com.trung.applicationdoctor.data.repository.room.ChannelDetailRoomRepository
-import com.trung.applicationdoctor.ui.activity.detail.DetailActivity.Companion.ERROR
+import com.trung.applicationdoctor.util.ERROR_EVENT
 import com.trung.applicationdoctor.util.extension.isNetworkConnected
 import com.trung.applicationdoctor.util.UIEvent
 import com.trung.applicationdoctor.util.extension.getUserMemberIdx
@@ -23,6 +24,7 @@ class DetailViewModel(private val defaultDispatcher: CoroutineDispatcher,
 
     val channelDetail: MutableLiveData<ChannelDetail?> = MutableLiveData<ChannelDetail?>()
     //val channelDetail: LiveData<ChannelDetail?> get() = _channelDetail
+
 
     /**
      * Event click on back button
@@ -45,45 +47,44 @@ class DetailViewModel(private val defaultDispatcher: CoroutineDispatcher,
      * @param boardId : pass the parameter to the API to query its detail info
      */
     fun getDetailChannel(boardId: String) {
-
         try {
             viewModelScope.launch (defaultDispatcher) {
                 if(context.isNetworkConnected) {
-                    channelApiRepository.getChannelDetail(memberIdx = context.getUserMemberIdx().toString(), boardId = boardId).let { result->
-                        result.data?.let {
-                            when (result.data.code) {
-                                "1000" -> {
-                                    viewModelScope.launch (defaultDispatcher){
-                                        insertDetailChannelToRoom(result.data)
+                    channelApiRepository.getChannelDetail(memberIdx = context.getUserMemberIdx().toString(), boardId = boardId).let { baseApiResult ->
+                        when (baseApiResult.status) {
+                            Status.SUCCESS -> {
+                                baseApiResult.data?.let { result ->
+                                    when (result.code) {
+                                        "1000" -> {
+                                            insertDetailChannelToRoom(result)
+                                            //channelDetail.set(it)
+                                            channelDetail.postValue(result)
+                                        }
+                                        else -> _uiEvent.postValue(UIEvent(ERROR_EVENT, result.codeMsg))
                                     }
-                                    //channelDetail.set(it)
-                                    channelDetail.postValue(result.data)
                                 }
-                                else -> _uiEvent.postValue(UIEvent(ERROR, it.codeMsg))
                             }
-                        }
 
+                            Status.ERROR -> {
+                                _uiEvent.postValue(UIEvent(ERROR_EVENT,baseApiResult.message))
+                            }
+                            Status.LOADING -> { }
+                        }
                     }
                 } else {
                     channelDetailRoomRepository.getChannelDetail(boardId).let {
                         if(it != null) {
                             //channelDetail.set(it)
                             channelDetail.postValue(it)
-
                         } else {
-                            _uiEvent.postValue(UIEvent(ERROR, "You have no internet connection to open the page"))
+                            _uiEvent.postValue(UIEvent(ERROR_EVENT, "You have no internet connection to open the page"))
                         }
                     }
-
                 }
-
             }
         } catch (ex: Exception) {
-            print("")
-
-        } finally {
-            print("")
-        }
+            _uiEvent.postValue(UIEvent(ERROR_EVENT,ex.message))
+        } finally { }
 
 
     }

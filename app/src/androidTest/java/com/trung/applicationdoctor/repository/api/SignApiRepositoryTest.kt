@@ -1,12 +1,7 @@
 package com.trung.applicationdoctor.repository.api
 
-import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth
-import com.trung.applicationdoctor.data.db.AppDoctorDatabase
-import com.trung.applicationdoctor.data.repository.api.ChannelApiRepository
 import com.trung.applicationdoctor.data.repository.api.SignApiRepository
 import com.trung.applicationdoctor.di.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,12 +14,10 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -63,7 +56,7 @@ class SignApiRepositoryTest : KoinTest {
     fun getCategoryList() {
         runBlocking {
             signApiRepository.signIn(memberId = "ttt@gmail.com", memberPw = "12122012gv!", deviceOS = "A", gcmKey = 2).let {
-                Truth.assertThat(it.data).isNotNull()
+                Truth.assertThat(it.data).isNull()
             }
         }
     }

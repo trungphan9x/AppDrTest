@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.trung.applicationdoctor.di.*
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
 class ApplicationDoctor : Application(){
@@ -13,8 +14,8 @@ class ApplicationDoctor : Application(){
         ApplicationDoctor.context = applicationContext
 
         startKoin {
-            // Android context
-            androidContext(applicationContext)
+            androidLogger()
+            androidContext(this@ApplicationDoctor)
             // modules
             modules(
                 listOf(viewModelModule, roomModule, repositoryModule, apiModule, networkModule)

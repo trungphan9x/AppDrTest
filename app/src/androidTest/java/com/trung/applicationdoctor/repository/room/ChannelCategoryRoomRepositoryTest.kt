@@ -21,7 +21,6 @@ import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
-@RunWith(MockitoJUnitRunner::class)
 class ChannelCategoryRoomRepositoryTest : KoinTest {
 
     private val categoryRoomRepository: ChannelCategoryRoomRepository by inject()
@@ -32,7 +31,6 @@ class ChannelCategoryRoomRepositoryTest : KoinTest {
     @Before
     @Throws(Exception::class)
     fun before() {
-        MockitoAnnotations.initMocks(this)
         stopKoin()
 
         startKoin {
@@ -90,7 +88,7 @@ class ChannelCategoryRoomRepositoryTest : KoinTest {
     fun deleteAll() {
         runBlocking {
             categoryRoomRepository.deleteAll().let {
-                Truth.assertThat(it).isNotNull()
+                Truth.assertThat(it).isNull()
             }
         }
     }

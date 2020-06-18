@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.trung.applicationdoctor.ApplicationDoctor
 import com.trung.applicationdoctor.core.BaseViewModel
-import com.trung.applicationdoctor.data.db.entity.ChannelCategoryEntity
+import com.trung.applicationdoctor.data.enum.Status
 import com.trung.applicationdoctor.data.remote.response.ChannelCategory
 import com.trung.applicationdoctor.data.repository.api.ChannelApiRepository
 import com.trung.applicationdoctor.data.repository.room.ChannelCategoryRoomRepository
+import com.trung.applicationdoctor.util.ERROR_EVENT
+import com.trung.applicationdoctor.util.UIEvent
 import com.trung.applicationdoctor.util.extension.isNetworkConnected
 import kotlinx.coroutines.*
 
@@ -45,22 +47,35 @@ class MainViewModel(
         try {
             viewModelScope.launch(defaultDispatcher) {
                 if (ApplicationDoctor.context.isNetworkConnected) {
-                    channelApiRepository.getCategoryList().let { result ->
-                        result.data?.let {result->
-                            when (result.code) {
-                                "1000" -> {
-                                        insertAllToChannelCategoryDb(
-                                            result.dataArray
-                                        ).let {
-                                            allChannelCategoryEntity.postValue(result.dataArray)
+                    channelApiRepository.getCategoryList().let { baseApiResult ->
+                        when (baseApiResult.status) {
+                            Status.SUCCESS -> {
+                                baseApiResult.data?.let { result ->
+                                    when (result.code) {
+                                        "1000" -> {
+                                            insertAllToChannelCategoryDb(
+                                                result.dataArray
+                                            ).let {
+                                                allChannelCategoryEntity.postValue(result.dataArray)
+                                            }
                                         }
-                                }
-                                "-1" -> {
-                                }
-                                else -> {
+                                        else -> {
+                                            _uiEvent.postValue(UIEvent(ERROR_EVENT,result.codeMsg))
+                                        }
+                                    }
                                 }
                             }
+
+                            Status.ERROR -> {
+                                _uiEvent.postValue(UIEvent(ERROR_EVENT,baseApiResult.message))
+                            }
+
+                            Status.LOADING -> {
+
+                            }
                         }
+
+
                     }
 
                 } else {
